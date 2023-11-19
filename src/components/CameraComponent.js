@@ -1,16 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import fetchData from '../services/api';
 
 export default function CameraComponent() {
   const [pickedImagePath, setPickedImagePath] = useState('');
+  const [data, setData] = useState(null);
+
+  const fetchDataFromApi = async () => {
+    try {
+      const result = await fetchData(pickedImagePath);
+      setData(result);
+    } catch (error) {
+      console.error('Error al obtener datos de la API:', error);
+    }
+  };
 
   const openCamera = async () => {
     // Ask the user for the permission to access the camera
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your camera!");
+      alert("You've refused to allow this app to access your camera!");
       return;
     }
 
@@ -18,7 +29,7 @@ export default function CameraComponent() {
 
     if (!result.canceled) {
       setPickedImagePath(result.assets[0].uri);
-      console.log(result.assets[0].uri);
+      fetchDataFromApi();
     }
   }
 
@@ -36,7 +47,16 @@ export default function CameraComponent() {
           />
         }
       </View>
+      <View>
+        <Text>Datos de la API:</Text>
+        {data ? (
+          <Text>{JSON.stringify(data)}</Text>
+        ) : (
+          <Text>Cargando datos...</Text>
+        )}
+      </View>
     </View>
+
   );
 }
 
