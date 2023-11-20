@@ -1,42 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import fetchData from '../services/api';
 
-export default function CameraComponent() {
+export default function ImagePickerComponent() {
   const [pickedImagePath, setPickedImagePath] = useState('');
-  const [data, setData] = useState(null);
 
-  const fetchDataFromApi = async () => {
-    try {
-      const result = await fetchData(pickedImagePath);
-      setData(result);
-    } catch (error) {
-      console.error('Error al obtener datos de la API:', error);
-    }
-  };
-
-  const openCamera = async () => {
-    // Ask the user for the permission to access the camera
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+  // This function is triggered when the "Select an image" button pressed
+  const showImagePicker = async () => {
+    // Ask the user for the permission to access the media library 
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("You've refused to allow this app to access your camera!");
+      alert("You've refused to allow this appp to access your photos!");
       return;
     }
 
-    const result = await ImagePicker.launchCameraAsync();
+    const result = await ImagePicker.launchImageLibraryAsync();
+
+    // Explore the result
+    console.log(result);
 
     if (!result.canceled) {
       setPickedImagePath(result.assets[0].uri);
-      fetchDataFromApi();
+      console.log(result.assets[0].uri);
     }
   }
 
   return (
     <View style={styles.screen}>
       <View style={styles.buttonContainer}>
-        <Button onPress={openCamera} title="Scanear Prueba" />
+        <Button onPress={showImagePicker} title="Selecciona un imagen" />
       </View>
 
       <View style={styles.imageContainer}>
@@ -47,16 +40,7 @@ export default function CameraComponent() {
           />
         }
       </View>
-      <View>
-        <Text>Datos de la API:</Text>
-        {data ? (
-          <Text>{JSON.stringify(data)}</Text>
-        ) : (
-          <Text>Cargando datos...</Text>
-        )}
-      </View>
     </View>
-
   );
 }
 
@@ -65,7 +49,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 0
   },
   buttonContainer: {
     width: 150,
@@ -81,4 +64,3 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   }
 });
-
