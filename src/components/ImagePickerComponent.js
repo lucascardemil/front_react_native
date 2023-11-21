@@ -1,35 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, StyleSheet, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import handlePostRequest from '../services/api';
+import * as FileSystem from 'expo-file-system';
 
 export default function ImagePickerComponent() {
     const [pickedImagePath, setPickedImagePath] = useState('');
 
-    // This function is triggered when the "Select an image" button pressed
     const showImagePicker = async () => {
-        // Ask the user for the permission to access the media library 
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
+    
         if (permissionResult.granted === false) {
             alert("You've refused to allow this appp to access your photos!");
             return;
         }
-
+    
         const result = await ImagePicker.launchImageLibraryAsync();
-
+    
         if (!result.canceled) {
-            const response = await handlePostRequest(result.uri);
+            try {
+                // Convertir la URI a un camino de archivo
+                const fileInfo = await FileSystem.getInfoAsync(result.uri);
+                
+                if (!fileInfo.exists) {
+                    alert("El archivo no existe.");
+                    return;
+                }
+    
+                const imageInfo = fileInfo.uri; // La URI con el esquema 'file'
+                
+                const image = await FileSystem.readAsStringAsync(imageInfo, {
+                    encoding: FileSystem.EncodingType.Base64,
+                });
 
-            if (response && response.image) {
-                setPickedImagePath(response.image);
-            } else {
-                alert("Error al procesar la imagen.");
+                console.log("imagepath64", image);
+
+                const response = await handlePostRequest(image );
+
+                console.log("response", response);
+
+                if (response && response.image) {
+                    setPickedImagePath(response.image);
+                } else {
+                    alert("Error al procesar la imagen.");
+                }
+            } catch (error) {
+                console.error("Error al obtener información del archivo:", error);
             }
         }
     }
-
-    return (
+        return (
         <View style={styles.screen}>
             <View style={styles.buttonContainer}>
                 <Button onPress={showImagePicker} title="Select an image" />

@@ -1,13 +1,13 @@
-const apiUrl = 'http://127.0.0.1:5000/api/scanner';
+const apiUrl = 'https://4zrl78mg-5000.brs.devtunnels.ms/api/scanner';
 
 const handlePostRequest = async (image) => {
-    // Configura los datos a enviar en la solicitud POST (puedes ajustarlo según tus necesidades)
-    const requestBody = {
-        image: image,
-    };
 
-    try {
-        // Realiza la solicitud POST utilizando fetch
+    const requestBody = {
+        image,
+    };
+    console.log(requestBody, "api");
+
+    try {        
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
