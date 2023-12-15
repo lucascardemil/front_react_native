@@ -1,23 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import fetchData from '../services/api';
+import * as FileSystem from 'expo-file-system';
+import handlePostRequest from '../services/api';
 
 export default function CameraComponent() {
   const [pickedImagePath, setPickedImagePath] = useState('');
-  const [data, setData] = useState(null);
-
-  const fetchDataFromApi = async () => {
-    try {
-      const result = await fetchData(pickedImagePath);
-      setData(result);
-    } catch (error) {
-      console.error('Error al obtener datos de la API:', error);
-    }
-  };
 
   const openCamera = async () => {
-    // Ask the user for the permission to access the camera
+
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
     if (permissionResult.granted === false) {
@@ -26,34 +17,54 @@ export default function CameraComponent() {
     }
 
     const result = await ImagePicker.launchCameraAsync();
+    console.log(result, 'result');
 
     if (!result.canceled) {
-      setPickedImagePath(result.assets[0].uri);
-      fetchDataFromApi();
-    }
+      try {
+          // Convertir la URI a un camino de archivo
+          const fileInfo = await FileSystem.getInfoAsync(result.assets[0].uri);
+          
+          if (!fileInfo.exists) {
+              alert("El archivo no existe.");
+              return;
+          }
+
+          const imageInfo = fileInfo.uri; // La URI con el esquema 'file'
+          
+          const image = await FileSystem.readAsStringAsync(imageInfo, {
+              encoding: FileSystem.EncodingType.Base64,
+          });
+          console.log("imagepath64", imageInfo);
+                
+          const response = await handlePostRequest(image);
+
+          console.log("response", response);
+
+          if (response && response.image) {
+              setPickedImagePath(response.image);
+          } else {
+              alert("Error al procesar la imagen.");
+          }
+      } catch (error) {
+          console.error("Error al obtener información del archivo:", error);
+      }
   }
+}
+
+useEffect(() => {
+  openCamera(); // Llamada a openCamera al cargar la vista
+}, []);
 
   return (
     <View style={styles.screen}>
-      <View style={styles.buttonContainer}>
-        <Button onPress={openCamera} title="Scanear Prueba" />
-      </View>
-
       <View style={styles.imageContainer}>
         {
-          pickedImagePath !== '' && <Image
+          pickedImagePath !== '' && 
+          <Image
             source={{ uri: pickedImagePath }}
             style={styles.image}
           />
         }
-      </View>
-      <View>
-        <Text>Datos de la API:</Text>
-        {data ? (
-          <Text>{JSON.stringify(data)}</Text>
-        ) : (
-          <Text>Cargando datos...</Text>
-        )}
       </View>
     </View>
 
@@ -66,11 +77,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 0
-  },
-  buttonContainer: {
-    width: 150,
-    flexDirection: 'row',
-    justifyContent: 'space-around'
   },
   imageContainer: {
     padding: 30

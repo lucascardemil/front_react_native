@@ -5,7 +5,7 @@ const handlePostRequest = async (image) => {
     const requestBody = {
         image,
     };
-    console.log(requestBody, "api");
+    console.log("api", requestBody);
 
     try {        
         const response = await fetch(apiUrl, {

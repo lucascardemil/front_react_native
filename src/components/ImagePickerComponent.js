@@ -8,6 +8,7 @@ export default function ImagePickerComponent() {
     const [pickedImagePath, setPickedImagePath] = useState('');
 
     const showImagePicker = async () => {
+        
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     
         if (permissionResult.granted === false) {
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         width: 400,
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
     },
     imageContainer: {
         padding: 30,

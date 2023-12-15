@@ -1,12 +1,23 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Navbar = () => {
+  const navigation = useNavigation();
+
+  const onPressMisPruebas = () => {
+    navigation.navigate('Mis Pruebas');
+  };
+
+  const onPressInicio = () => {
+    navigation.navigate('Inicio');
+  };
+
   return (
     <View style={styles.navbar}>
-      <Text style={styles.text}>Inicio</Text>
+      <Text onPress={onPressInicio} style={styles.text}>Inicio</Text>
       <Text style={styles.text}>Notas</Text>
-      <Text style={styles.text}>Contacto</Text>
+      <Text onPress={onPressMisPruebas} style={styles.text}>Mis Pruebas</Text>
     </View>
   );
 };
