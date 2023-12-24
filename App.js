@@ -7,6 +7,9 @@ import QRScannerScreen from './src/screens/LectorQR';
 import CameraComponent from './src/components/CameraComponent';
 import GeneratePrueba from './src/screens/GeneratePrueba';
 import MisPruebas from './src/screens/MisPruebas';
+import MisCursos from './src/screens/cursos'
+import DetalleCurso from './src/screens/alunosPorCurso';
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -19,6 +22,8 @@ export default function App() {
         <Stack.Screen name="Scanner" component={CameraComponent} />
         <Stack.Screen name="Prueba" component={GeneratePrueba} />
         <Stack.Screen name="Mis Pruebas" component={MisPruebas} />
+        <Stack.Screen name="Mis Cursos" component={MisCursos} />
+        <Stack.Screen name="DetalleCurso" component={DetalleCurso} />
       </Stack.Navigator>
     </NavigationContainer>
   );

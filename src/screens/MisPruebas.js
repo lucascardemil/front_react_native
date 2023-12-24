@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     margin: 4
   },
   scrollViewContainer: {
-    padding: 20,
+    padding: 50,
   },
 });

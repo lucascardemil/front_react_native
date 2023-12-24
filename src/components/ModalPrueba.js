@@ -12,7 +12,11 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas })
       Alert.alert('Error', 'Ingrese la asignatura antes de continuar.');
       return;
     }
-
+    if (asignatura.length > 16) {
+      Alert.alert('Error', 'La asignatura no puede tener más de 16 caracteres.');
+      return;
+    }
+    
     // Resto del código para la solicitud
     const usuario_id = 1; // Agregué la declaración de usuario_id
     try {
@@ -40,7 +44,7 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas })
         console.log(responseData);
 
         // Navegar y cerrar el modal
-        navigation.navigate('Mis Pruebas');
+        navigation.navigate('Scanner');
         onClose();
       } else {
         // Manejar errores de la respuesta

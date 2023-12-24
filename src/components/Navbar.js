@@ -13,11 +13,15 @@ const Navbar = () => {
     navigation.navigate('Inicio');
   };
 
+  const onPressCursos = () => {
+    navigation.navigate('Mis Cursos');
+  };
+
   return (
     <View style={styles.navbar}>
       <Text onPress={onPressInicio} style={styles.text}>Inicio</Text>
-      <Text style={styles.text}>Notas</Text>
-      <Text onPress={onPressMisPruebas} style={styles.text}>Mis Pruebas</Text>
+      <Text onPress={onPressCursos} style={styles.text}>Cursos</Text>
+      <Text onPress={onPressMisPruebas} style={styles.text}>Mis Hojas</Text>
     </View>
   );
 };
