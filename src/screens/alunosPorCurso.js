@@ -113,9 +113,10 @@ const DetalleCurso = ({ route }) => {
           placeholder="Nombre"
           value={editedAlumnoValues.nombre || alumno[1]}
           onChangeText={(value) => handleEditChange('nombre', value)}
+          style={styles.tableText}
         />
       ) : (
-        <Text key={`nombre-${alumno[0]}`}>{alumno[1]}</Text>
+        <Text key={`nombre-${alumno[0]}`} style={styles.tableText}>{alumno[1]}</Text>
       ),
       isEditing ? (
         <TextInput
@@ -123,9 +124,10 @@ const DetalleCurso = ({ route }) => {
           placeholder="Apellido"
           value={editedAlumnoValues.apellido || alumno[2]}
           onChangeText={(value) => handleEditChange('apellido', value)}
+          style={styles.tableText}
         />
       ) : (
-        <Text key={`apellido-${alumno[0]}`}>{alumno[2]}</Text>
+        <Text key={`apellido-${alumno[0]}`} style={styles.tableText}>{alumno[2]}</Text>
       ),
       isEditing ? (
         <TouchableOpacity key={`acciones-${alumno[0]}`} onPress={() => editarAlumno(alumno[0])}>
@@ -134,10 +136,10 @@ const DetalleCurso = ({ route }) => {
       ) : (
         <View style={styles.icons} key={`acciones-${alumno[0]}`}>
           <TouchableOpacity onPress={() => setEditingAlumnoId(alumno[0])}>
-            <Icon name="pencil" size={20} color="black" />
+            <Icon name="pencil" size={28} color="black" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => eliminarAlumno(alumno[0])}>
-            <Icon name="trash-o" size={20} color="red" />
+            <Icon name="trash-o" size={28} color="red" />
           </TouchableOpacity>
         </View>
       ),
@@ -158,7 +160,7 @@ const DetalleCurso = ({ route }) => {
       </View>
       <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
         <Row data={tableHead} style={styles.head} textStyle={styles.tableHeaderText} />
-        <Rows data={tableData} textStyle={styles.tableText} />
+        <Rows data={tableData} />
       </Table>
     </View>
   );
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   tableText: {
-    fontSize: 16,  
+    fontSize: 20,  
   },
 
 });
