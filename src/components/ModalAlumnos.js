@@ -1,41 +1,43 @@
 import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, Pressable, View, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
-const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas }) => {
-  const [asignatura, setAsignatura] = useState('');
-  const navigation = useNavigation();
+const ModalAlumnos = ({ visible, onClose, curso, }) => {
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
 
   const handleNavigatePrueba = async () => {
-    // Validar que la asignatura no esté vacía
-    if (asignatura.trim() === '') {
+    if (nombre.trim() === '') {
       Alert.alert('Error', 'Ingrese la asignatura antes de continuar.');
       return;
     }
-    if (asignatura.length > 16) {
+    if (nombre.length > 16) {
       Alert.alert('Error', 'La asignatura no puede tener más de 16 caracteres.');
       return;
     }
-    
-    // Resto del código para la solicitud
-    const usuario_id = 1; // Agregué la declaración de usuario_id
+    if (apellido.trim() === '') {
+      Alert.alert('Error', 'Ingrese la asignatura antes de continuar.');
+      return;
+    }
+    if (apellido.length > 16) {
+      Alert.alert('Error', 'La asignatura no puede tener más de 16 caracteres.');
+      return;
+    }
+
     try {
-      const datosHojadeRespuestas = {
-        asignatura,
-        preguntas,
-        alternativas,
-        respuestas,
-        usuario_id,
+      const alumno = {
+        nombre,
+        apellido,
+        id_curso: curso[0],
       };
 
-      console.log('datos', datosHojadeRespuestas);
+      console.log('datos', alumno);
       // Realizar la solicitud fetch
-      const response = await fetch('https://4zrl78mg-5000.brs.devtunnels.ms/hojarespuestas', {
+      const response = await fetch('https://4zrl78mg-5000.brs.devtunnels.ms/alumnos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(datosHojadeRespuestas),
+        body: JSON.stringify(alumno),
       });
 
       // Manejar la respuesta
@@ -43,9 +45,8 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas })
         const responseData = await response.json();
         console.log(responseData);
 
-        // Navegar y cerrar el modal
-        navigation.navigate('Scanner');
         onClose();
+
       } else {
         // Manejar errores de la respuesta
         console.error('Error en la respuesta:', response.statusText);
@@ -70,12 +71,18 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas })
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Asignatura:</Text>
+            <Text style={styles.modalText}>Alumno:</Text>
             <TextInput
               style={styles.input}
-              placeholder="Ingrese la Asignatura"
-              value={asignatura}
-              onChangeText={(text) => setAsignatura(text)}
+              placeholder="Ingrese el Nombre del alumno"
+              value={nombre}
+              onChangeText={(text) => setNombre(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Ingrese el Apellido del alumno"
+              value={apellido}
+              onChangeText={(text) => setApellido(text)}
             />
             <Pressable
               style={[styles.button, styles.buttonClose]}
@@ -139,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ModalPruebas;
+export default ModalAlumnos;

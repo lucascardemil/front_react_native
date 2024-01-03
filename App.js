@@ -9,6 +9,7 @@ import GeneratePrueba from './src/screens/GeneratePrueba';
 import MisPruebas from './src/screens/MisPruebas';
 import MisCursos from './src/screens/cursos'
 import DetalleCurso from './src/screens/alunosPorCurso';
+import CrearCursoFormulario from './src/screens/FormCursos';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,8 @@ export default function App() {
         <Stack.Screen name="Prueba" component={GeneratePrueba} />
         <Stack.Screen name="Mis Pruebas" component={MisPruebas} />
         <Stack.Screen name="Mis Cursos" component={MisCursos} />
-        <Stack.Screen name="DetalleCurso" component={DetalleCurso} />
+        <Stack.Screen name="Detalle Curso" component={DetalleCurso} />
+        <Stack.Screen name="Crear Cursos" component={CrearCursoFormulario} />
       </Stack.Navigator>
     </NavigationContainer>
   );

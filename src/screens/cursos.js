@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
-
+import CrearCurso from '../components/GenerarCurso'
 export default MisCursos = ({ navigation }) => {
   const [cursos, setCursos] = useState([]);
 
@@ -42,7 +42,6 @@ export default MisCursos = ({ navigation }) => {
 
   const eliminarCurso = async (id_curso) => {
     try {
-      // Realizar la solicitud DELETE
       const response = await fetch(`https://4zrl78mg-5000.brs.devtunnels.ms/cursos/${id_curso}`, {
         method: 'DELETE',
         headers: {
@@ -90,25 +89,26 @@ export default MisCursos = ({ navigation }) => {
     }
   };
   
-  const verDetalleCurso = (idCurso) => {
-    navigation.navigate('DetalleCurso', { idCurso });
+  const verDetalleCurso = (curso) => {
+    navigation.navigate('Detalle Curso', { curso });
   };
-    
+      
   return (
     <View style={styles.container}>
+      <CrearCurso/>
       {cursos ? (
         cursos.map((curso, index) => (
-            <TouchableOpacity key={index} style={styles.create} onPress={() => verDetalleCurso(curso[0])}>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text}>{curso[1]}</Text>
-              <TouchableOpacity  onPress={() => eliminarAlumnosYCurso(curso[0])}>
-                <Icon name="trash-o" size={30} color="red" />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity key={index} style={styles.create} onPress={() => verDetalleCurso(curso)}>
+              <View style={styles.rowContainer}>
+                <Text style={styles.text}>{curso[1]}</Text>
+                <TouchableOpacity  onPress={() => eliminarAlumnosYCurso(curso[0])}>
+                  <Icon name="trash-o" size={30} color="red" />
+                </TouchableOpacity>
+              </View>
             </TouchableOpacity>
         ))
       ) : (
-        <Text>No hay hojas de respuestas disponibles.</Text>
+        <Text>No hay cursos disponibles.</Text>
       )}
     </View>
   );
