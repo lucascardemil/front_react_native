@@ -4,8 +4,9 @@ import * as ImagePicker from 'expo-image-picker';
 import handlePostRequest from '../services/api';
 import * as FileSystem from 'expo-file-system';
 
-export default function ImagePickerComponent() {
+export default function ImagePickerComponent({ANSWER_KEY, jsonData, id}) {
     const [pickedImagePath, setPickedImagePath] = useState('');
+    console.log(jsonData, "piker");
 
     const showImagePicker = async () => {
         
@@ -36,7 +37,7 @@ export default function ImagePickerComponent() {
 
                 console.log("imagepath64", image);
 
-                const response = await handlePostRequest(image );
+                const response = await handlePostRequest({ image, ANSWER_KEY, jsonData, id});
 
                 console.log("response", response);
 

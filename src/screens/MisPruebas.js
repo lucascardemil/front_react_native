@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
 import MisHojas from '../components/hojas_de_respuestas'
 export default MisPruebas = ({ navigation }) => {
-
+  
   const onPressPrueba = () => {
     navigation.navigate('Prueba');
   };
@@ -16,7 +16,7 @@ export default MisPruebas = ({ navigation }) => {
           </Text>
         </View>
       </TouchableOpacity>
-      <MisHojas/>
+      <MisHojas  navigation={navigation}/>
     </ScrollView>
   );
 };

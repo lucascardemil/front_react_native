@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; 
 
-export default MisHojas = ({ navigation }) => {
+export default HojasScanner = ({ route, navigation }) => {
   const [hojasRespuestas, setHojasRespuestas] = useState([]);
+  const { jsonData } = route.params;
+
+  console.log(jsonData, " hojas");
 
   useEffect(() => {
     const obtenerHojasRespuestas = async () => {
@@ -30,46 +32,24 @@ export default MisHojas = ({ navigation }) => {
     obtenerHojasRespuestas();
   }, []);
 
-  const eliminarHoja = async (hojaId) => {
-    console.log(hojaId);
-    try {
-      // Realizar la solicitud DELETE
-      const response = await fetch(`https://4zrl78mg-5000.brs.devtunnels.ms/hojarespuestas/${hojaId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        // Actualizar el estado después de la eliminación
-        setHojasRespuestas((prevHojasRespuestas) =>
-          prevHojasRespuestas.filter((hoja) => hoja[0] !== hojaId)
-        );
-      } else {
-        // Manejar errores de la respuesta DELETE
-        console.error('Error en la respuesta DELETE:', response.statusText);
-        Alert.alert('Error', 'Hubo un problema al eliminar la hoja de respuestas.');
-      }
-    } catch (error) {
-      // Manejar errores de la solicitud DELETE
-      console.error('Error al enviar la solicitud DELETE:', error.message);
-      Alert.alert('Error', 'Hubo un problema al eliminar la hoja de respuestas.');
+  const onSelectHoja = (hoja) => {
+    if (navigation) {
+      navigation.navigate('Gestion de prueba', {id: hoja[0] , preguntas: hoja[3], respuestas: hoja[4], jsonData });
+    } else {
+      console.error("Navigation prop is undefined.");
     }
   };
-  
+
+ 
   return (
-    <View>
+    <View style={styles.container}>
       {hojasRespuestas ? (
         hojasRespuestas.map((hoja, index) => (
-          <View key={index} style={styles.create}>
-            <View style={styles.rowContainer}>
-              <Text style={styles.text}>{hoja[1]}</Text>
-              <TouchableOpacity  onPress={() => eliminarHoja(hoja[0])}>
-                <Icon name="trash-o" size={30} color="red" />
-              </TouchableOpacity>
+          <TouchableOpacity key={index} onPress={() => onSelectHoja(hoja)} style={styles.rowContainer}>
+            <View style={styles.create}>
+                <Text style={styles.text}>{hoja[1]}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))
       ) : (
         <Text>No hay hojas de respuestas disponibles.</Text>

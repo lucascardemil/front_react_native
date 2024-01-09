@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 
 const Navbar = () => {
   const navigation = useNavigation();
@@ -19,28 +20,26 @@ const Navbar = () => {
 
   return (
     <View style={styles.navbar}>
-      <Text onPress={onPressInicio} style={styles.text}>Inicio</Text>
-      <Text onPress={onPressCursos} style={styles.text}>Cursos</Text>
-      <Text onPress={onPressMisPruebas} style={styles.text}>Mis Hojas</Text>
+      <Icon onPress={onPressInicio} style={styles.icons} name="home" size={50} color="#FFFFFF" />
+      <Icon onPress={onPressCursos} style={styles.icons} name="book" size={46} color="#FFFFFF" />
+      <Icon onPress={onPressMisPruebas} style={styles.icons} name="file" size={40} color="#FFFFFF" />    
+      <Icon onPress={onPressInicio} style={styles.icons} name="user-circle" size={40} color="#FFFFFF" />    
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   navbar: {
-    height: 100,
-    paddingTop: 38,
+    height: 80,
     backgroundColor: '#1e90ff',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
-  text: {
-    display: 'flex',
+    alignContent: 'center',
     justifyContent: 'center',
-    color: '#fff',
-    fontSize: 18,
-    margin: 10,
+    gap: 50
   },
+  icons: {
+    marginTop: 16
+  }
 });
 
 export default Navbar;

@@ -22,12 +22,16 @@ const ModalAlumnos = ({ visible, onClose, curso, }) => {
       Alert.alert('Error', 'La asignatura no puede tener más de 16 caracteres.');
       return;
     }
-
+    
     try {
+
+      QR = ''
+      
       const alumno = {
         nombre,
         apellido,
         id_curso: curso[0],
+        QR
       };
 
       console.log('datos', alumno);

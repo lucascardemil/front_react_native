@@ -28,10 +28,19 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.instructionsContainer}>
+        <Text style={styles.title}>Cómo funciona:</Text>
+        <Text style={styles.subtitle}>Pasos a seguir:</Text>
+        <Text>1° Crea tu curso con tus alumnos</Text>
+        <Text>2° Crea tu hoja de respuestas</Text>
+        <Text>3° Escanea el QR del evaluado</Text>
+        <Text>4° Selecciona las respuestas correctas</Text>
+        <Text>5° Escanea la prueba del evaluado</Text>
+        <Text>6° Obten tu nota y repite</Text>
+      </View>
       <View style={styles.buttonContainer}>
         <Button title="Scanear Prueba" onPress={handleScanButtonPress} />
       </View>
-        <ImagePickerComponent />
     </View>
   );
 }
@@ -44,9 +53,25 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: 150,
-    marginTop: 60,
+    marginTop: 80,
     marginBottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  instructionsContainer: {
+    padding: 20,
+    borderWidth: 2,
+    borderColor: '#1e90ff',
+    borderRadius: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
 });

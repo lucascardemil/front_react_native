@@ -1,9 +1,12 @@
 const apiUrl = 'https://4zrl78mg-5000.brs.devtunnels.ms/api/scanner';
 
-const handlePostRequest = async (image) => {
+const handlePostRequest = async ({ image, ANSWER_KEY, jsonData, id }) => {
 
     const requestBody = {
         image,
+        ANSWER_KEY, 
+        jsonData,
+        id_hoja_de_respuestas: id       
     };
     console.log("api", requestBody);
 
@@ -23,7 +26,6 @@ const handlePostRequest = async (image) => {
 
         // Convierte la respuesta a formato JSON
         const data = await response.json();
-        console.log(data);
         return data;
     } catch (error) {
         console.error('Error al realizar la solicitud POST:', error);

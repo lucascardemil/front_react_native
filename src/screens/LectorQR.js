@@ -20,9 +20,18 @@ export default QRScannerScreen = ({ navigation }) => {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setShowModal(false);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    navigation.navigate('Mis Pruebas');
-  };
+    try {
+      const jsonData = JSON.parse(
+        data
+          .replace(/(\w+):/g, '"$1":')  // Agrega comillas dobles a las claves
+          .replace(/'([^']*)'/g, '"$1"') // Reemplaza comillas simples con dobles
+      );
+  
+      navigation.navigate('Hojas Scanner', { jsonData });
+    } catch (error) {
+      alert(`Error parsing JSON: ${error}`);
+    }  };
+  
 
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;

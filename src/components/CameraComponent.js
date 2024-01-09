@@ -4,8 +4,9 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import handlePostRequest from '../services/api';
 
-export default function CameraComponent() {
+export default function CameraComponent({ navigation, route }) {
   const [pickedImagePath, setPickedImagePath] = useState('');
+  const { ANSWER_KEY, alumnoData } = route.params;
 
   const openCamera = async () => {
 
@@ -36,7 +37,7 @@ export default function CameraComponent() {
           });
           console.log("imagepath64", imageInfo);
                 
-          const response = await handlePostRequest(image);
+          const response = await handlePostRequest(image,  ANSWER_KEY, alumnoData);
 
           console.log("response", response);
 

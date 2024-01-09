@@ -3,19 +3,17 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Button, Alert } f
 import { useNavigation } from '@react-navigation/native';
 import ModalPruebas from '../components/ModalPrueba';  // Ajusta la ruta según la ubicación de tu ModalPruebas
 
-const Alternativa = ({ letra, onPress, isSelected }) => (
+const Alternativa = ({ indice, onPress, isSelected }) => (
   <TouchableOpacity onPress={onPress}>
     <View style={[styles.alternativa, isSelected && styles.selectedAlternativa]}>
-      <Text>{letra}</Text>
+      <Text>{indice + 1}</Text>
     </View>
   </TouchableOpacity>
 );
 
 const GenerarFormulario = ({ preguntas, alternativas }) => {
-  const [respuestas, setRespuestas] = useState(Array(preguntas).fill(0));
+  const [respuestas, setRespuestas] = useState(Array(preguntas).fill(null));
   const [showModal, setShowModal] = useState(false);
-
-  const letrasAlternativas = ['a', 'b', 'c', 'd', 'e'];
 
   const handleRespuestaChange = (index, value) => {
     const nuevasRespuestas = [...respuestas];
@@ -24,13 +22,13 @@ const GenerarFormulario = ({ preguntas, alternativas }) => {
   };
 
   const handleSubirPrueba = () => {
-    const preguntasSinResponder = [];
-    respuestas.forEach((respuesta, index) => {
-      if (respuesta === 0) {
-        preguntasSinResponder.push(index + 1);
+    const preguntasSinResponder = respuestas.reduce((sinResponder, respuesta, index) => {
+      if (respuesta === null) {
+        sinResponder.push(index + 1);
       }
-    });
-  
+      return sinResponder;
+    }, []);
+
     if (preguntasSinResponder.length === 0) {
       setShowModal(true);
     } else {
@@ -38,7 +36,6 @@ const GenerarFormulario = ({ preguntas, alternativas }) => {
       Alert.alert('Error', `Debes contestar la(s) pregunta(s) ${preguntasSinResponderString} antes de subir la prueba`);
     }
   };
-
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -50,9 +47,9 @@ const GenerarFormulario = ({ preguntas, alternativas }) => {
               {[...Array(alternativas).keys()].map((value) => (
                 <Alternativa
                   key={value}
-                  letra={letrasAlternativas[value]}
-                  onPress={() => handleRespuestaChange(index, value + 1)}
-                  isSelected={respuestas[index] === value + 1}
+                  indice={value}
+                  onPress={() => handleRespuestaChange(index, value)}
+                  isSelected={respuestas[index] === value}
                 />
               ))}
             </View>
@@ -69,7 +66,6 @@ const GenerarFormulario = ({ preguntas, alternativas }) => {
     </ScrollView>
   );
 };
-
 
 const styles = StyleSheet.create({
   scrollViewContainer: {

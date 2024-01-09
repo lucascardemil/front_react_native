@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, Text, View, StyleSheet, TouchableOpacity, Modal, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 import CrearCurso from '../components/GenerarCurso'
 export default MisCursos = ({ navigation }) => {
   const [cursos, setCursos] = useState([]);
+  const [cursoAEliminar, setCursoAEliminar] = useState(null);
+  const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState(false);
 
   useEffect(() => {
     const obtenerCursos = async () => {
@@ -93,23 +95,63 @@ export default MisCursos = ({ navigation }) => {
     navigation.navigate('Detalle Curso', { curso });
   };
       
+const showConfirmDeleteModal = (curso) => {
+    setCursoAEliminar(curso);
+    setConfirmDeleteModalVisible(true);
+  };
+
+  const hideConfirmDeleteModal = () => {
+    setCursoAEliminar(null);
+    setConfirmDeleteModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
-      <CrearCurso/>
+      <CrearCurso />
       {cursos ? (
         cursos.map((curso, index) => (
-            <TouchableOpacity key={index} style={styles.create} onPress={() => verDetalleCurso(curso)}>
-              <View style={styles.rowContainer}>
-                <Text style={styles.text}>{curso[1]}</Text>
-                <TouchableOpacity  onPress={() => eliminarAlumnosYCurso(curso[0])}>
-                  <Icon name="trash-o" size={30} color="red" />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
+          <TouchableOpacity key={index} style={styles.create} onPress={() => verDetalleCurso(curso)}>
+            <View style={styles.rowContainer}>
+              <Text style={styles.text}>{curso[1]}</Text>
+              <TouchableOpacity onPress={() => showConfirmDeleteModal(curso)}>
+                <Icon name="trash-o" size={30} color="red" />
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
         ))
       ) : (
         <Text>No hay cursos disponibles.</Text>
       )}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={confirmDeleteModalVisible}
+        onRequestClose={hideConfirmDeleteModal}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            {cursoAEliminar && (
+              <Text style={styles.modalText}>
+                ¿Seguro que desea borrar el curso "{cursoAEliminar[1]}"?
+              </Text>
+            )}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
+              <Pressable
+                style={[styles.button, styles.buttonbg]}
+                onPress={hideConfirmDeleteModal}>
+                <Text style={styles.textStyle}>Cancelar</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonbg]}
+                onPress={() => {
+                  hideConfirmDeleteModal();
+                  eliminarAlumnosYCurso(cursoAEliminar[0]);
+                }}>
+                <Text style={styles.textStyle}>Borrar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>      
     </View>
   );
 };
@@ -140,6 +182,48 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: 4,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    width: 400,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#1e90ff', // Add black border
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    marginTop: 10,
+    elevation: 2,
+  },
+  buttonbg: {
+    backgroundColor: '#1e90ff',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });
 

@@ -6,28 +6,34 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas })
   const [asignatura, setAsignatura] = useState('');
   const navigation = useNavigation();
 
+  const generarArrayPreguntas = (numeroPreguntas) => {
+    return Array.from({ length: numeroPreguntas }, (_, index) => index);
+  };
+
   const handleNavigatePrueba = async () => {
     // Validar que la asignatura no esté vacía
     if (asignatura.trim() === '') {
       Alert.alert('Error', 'Ingrese la asignatura antes de continuar.');
       return;
     }
-    if (asignatura.length > 16) {
+    if (asignatura.length > 16) {x
       Alert.alert('Error', 'La asignatura no puede tener más de 16 caracteres.');
       return;
     }
     
-    // Resto del código para la solicitud
+    const preguntasArray = generarArrayPreguntas(preguntas);
+    console.log("preguntasArrsy", preguntasArray);
     const usuario_id = 1; // Agregué la declaración de usuario_id
+
     try {
       const datosHojadeRespuestas = {
         asignatura,
-        preguntas,
-        alternativas,
+        preguntas: preguntasArray,
         respuestas,
         usuario_id,
+        alternativas,
       };
-
+      
       console.log('datos', datosHojadeRespuestas);
       // Realizar la solicitud fetch
       const response = await fetch('https://4zrl78mg-5000.brs.devtunnels.ms/hojarespuestas', {
@@ -44,7 +50,7 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas })
         console.log(responseData);
 
         // Navegar y cerrar el modal
-        navigation.navigate('Scanner');
+        navigation.navigate('Mis Pruebas');
         onClose();
       } else {
         // Manejar errores de la respuesta
