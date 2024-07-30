@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "FRONT_REACT_NATIVE_2",
-    "slug": "FRONT_REACT_NATIVE_2",
+    "slug": "lectororm",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access camera.",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -32,11 +36,19 @@
       },
       "permissions": [
         "CAMERA",
-        "RECORD_AUDIO"
-      ]
+        "RECORD_AUDIO",
+        "android.permission.CAMERA"
+      ],
+      "package": "com.lucascardemil.lectororm"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9ba8dd08-af02-49e0-b443-cbdeed3ec0ac"
+      }
+    },
+    "owner": "lucascardemil"
   }
 }

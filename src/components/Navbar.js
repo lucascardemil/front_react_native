@@ -18,12 +18,16 @@ const Navbar = () => {
     navigation.navigate('Mis Cursos');
   };
 
+  const onPressUser = () => {
+    navigation.navigate('Inicio');
+  };
+
   return (
     <View style={styles.navbar}>
       <Icon onPress={onPressInicio} style={styles.icons} name="home" size={50} color="#FFFFFF" />
       <Icon onPress={onPressCursos} style={styles.icons} name="book" size={46} color="#FFFFFF" />
       <Icon onPress={onPressMisPruebas} style={styles.icons} name="file" size={40} color="#FFFFFF" />    
-      <Icon onPress={onPressInicio} style={styles.icons} name="user-circle" size={40} color="#FFFFFF" />    
+      <Icon onPress={onPressUser} style={styles.icons} name="user-circle" size={40} color="#FFFFFF" />    
     </View>
   );
 };

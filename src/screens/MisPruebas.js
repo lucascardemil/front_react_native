@@ -1,54 +1,27 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
-import MisHojas from '../components/hojas_de_respuestas'
-export default MisPruebas = ({ navigation }) => {
-  
-  const onPressPrueba = () => {
-    navigation.navigate('Prueba');
-  };
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import styles from '../styles/style_pruebas';
+import MisHojasRespuestas from '../components/MisHojasRespuestas'
 
-  return (
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-      <TouchableOpacity onPress={onPressPrueba}>
-        <View style={styles.create}>
-          <Text style={styles.text}>
-            Crear Nueva Prueba +
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <MisHojas  navigation={navigation}/>
-    </ScrollView>
-  );
+const MisPruebas = ({ navigation, route }) => {
+    const nueva_prueba = route.params === undefined ? [] : route.params.prueba;
+
+    const onPressPrueba = () => {
+        navigation.navigate('Crear Prueba');
+    };
+
+    return (
+        <ScrollView style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20}}>
+            <View style={styles.container}>
+                <TouchableOpacity style={styles.button} onPress={onPressPrueba}>
+                    <AntDesign name="plussquareo" size={24} color="white" />
+                    <Text style={styles.buttonText}>Nueva Prueba</Text>
+                </TouchableOpacity>
+            </View>
+            <MisHojasRespuestas navigation={navigation} nueva_prueba={nueva_prueba}/>
+        </ScrollView>
+    );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  create: {
-    width: 310,
-    height: 85,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: '#1e90ff',
-    marginBottom: 20,
-    textAlign: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 30,
-    margin: 6
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    margin: 4
-  },
-  scrollViewContainer: {
-    padding: 50,
-  },
-});
+export default MisPruebas;

@@ -1,148 +1,64 @@
 import React, { useState } from 'react';
-import { Alert, Modal, StyleSheet, Text, Pressable, View, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Modal, Text, Pressable, View, TextInput } from 'react-native';
+import styles from '../styles/style_modal_pruebas';
+import AgregarPrueba from '../services/pruebas/services_agregar_prueba';
 
-const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas }) => {
-  const [asignatura, setAsignatura] = useState('');
-  const navigation = useNavigation();
+const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas, onPruebaAdded }) => {
+    const usuario_id = 1;
+    const [asignatura, setAsignatura] = useState('');
 
-  const generarArrayPreguntas = (numeroPreguntas) => {
-    return Array.from({ length: numeroPreguntas }, (_, index) => index);
-  };
-
-  const handleNavigatePrueba = async () => {
-    // Validar que la asignatura no esté vacía
-    if (asignatura.trim() === '') {
-      Alert.alert('Error', 'Ingrese la asignatura antes de continuar.');
-      return;
-    }
-    if (asignatura.length > 16) {x
-      Alert.alert('Error', 'La asignatura no puede tener más de 16 caracteres.');
-      return;
-    }
-    
-    const preguntasArray = generarArrayPreguntas(preguntas);
-    console.log("preguntasArrsy", preguntasArray);
-    const usuario_id = 1; // Agregué la declaración de usuario_id
-
-    try {
-      const datosHojadeRespuestas = {
-        asignatura,
-        preguntas: preguntasArray,
-        respuestas,
-        usuario_id,
-        alternativas,
-      };
-      
-      console.log('datos', datosHojadeRespuestas);
-      // Realizar la solicitud fetch
-      const response = await fetch('https://4zrl78mg-5000.brs.devtunnels.ms/hojarespuestas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datosHojadeRespuestas),
-      });
-
-      // Manejar la respuesta
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log(responseData);
-
-        // Navegar y cerrar el modal
-        navigation.navigate('Mis Pruebas');
+    const hideConfirmModal = () => {
         onClose();
-      } else {
-        // Manejar errores de la respuesta
-        console.error('Error en la respuesta:', response.statusText);
-        Alert.alert('Error', 'Hubo un problema al enviar la solicitud.');
-      }
-    } catch (error) {
-      // Manejar errores de la solicitud
-      console.error('Error al enviar la solicitud:', error.message);
-      Alert.alert('Error', 'Hubo un problema al enviar la solicitud.');
-    }
-  };
+    };
 
-  return (
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={visible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          onClose();
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Asignatura:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ingrese la Asignatura"
-              value={asignatura}
-              onChangeText={(text) => setAsignatura(text)}
-            />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={handleNavigatePrueba}>
-              <Text style={styles.textStyle}>OK!</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-    </View>
-  );
+    return (
+
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={visible}
+            onRequestClose={hideConfirmModal}>
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Ingrese el nombre de la Asignatura:</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Ingrese la Asignatura"
+                        value={asignatura}
+                        onChangeText={(text) => setAsignatura(text)}
+                    />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 300 }}>
+                        <Pressable
+                            style={[styles.buttonClose]}
+                            onPress={hideConfirmModal}>
+                            <Text style={styles.textStyle}>Cancelar</Text>
+                        </Pressable>
+                        <Pressable
+                            style={[styles.button]}
+                            onPress={async () => {
+                                const response = await AgregarPrueba(usuario_id, preguntas, alternativas, respuestas, asignatura);
+                                if (response.status === true) {
+
+                                    const nuevaPrueba = [
+                                        response.hojas_respuestas.alternativas,
+                                        response.hojas_respuestas.asignatura,
+                                        response.hojas_respuestas.preguntas,
+                                        response.hojas_respuestas.respuestas,
+                                        response.hojas_respuestas.usuario_id
+                                    ];
+                                    onPruebaAdded(nuevaPrueba);
+                                    setAsignatura('');
+                                    onClose();
+                                }
+                            }}>
+                            <Text style={styles.textStyle}>Guardar</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+
+    );
 };
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'start',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    marginTop: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 10,
-    textAlign: 's',
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-    width: 250,
-  },
-});
 
 export default ModalPruebas;
