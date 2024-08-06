@@ -1,33 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { CameraView, Camera } from "expo-camera";
 import PasosModal from '../components/Modal';
 
 const QRScannerScreen = ({ navigation }) => {
-    const [hasPermission, setHasPermission] = useState(null);
-    const [scanned, setScanned] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
+    const [hasPermission, setHasPermission] = useState(null);
+    const [scanned, setScanned] = useState(false);
+
     useEffect(() => {
-        const getBarCodeScannerPermissions = async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
+        const getCameraPermissions = async () => {
+            const { status } = await Camera.requestCameraPermissionsAsync();
+            setHasPermission(status === "granted");
         };
 
-        getBarCodeScannerPermissions();
+        getCameraPermissions();
     }, []);
+
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
         setShowModal(false);
         try {
-            const data_alumno = JSON.parse(
-                data
-                    .replace(/(\w+):/g, '"$1":')  // Agrega comillas dobles a las claves
-                    .replace(/'([^']*)'/g, '"$1"') // Reemplaza comillas simples con dobles
-            );
-
-            navigation.navigate('Asignaturas', { data_alumno: data_alumno });
+            navigation.navigate('Asignaturas', { data_alumno: data });
         } catch (error) {
             alert(`Error parsing JSON: ${error}`);
         }
@@ -43,8 +39,11 @@ const QRScannerScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <BarCodeScanner
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            <CameraView
+                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                barcodeScannerSettings={{
+                    barcodeTypes: ["qr", "pdf417"],
+                }}
                 style={StyleSheet.absoluteFillObject}
             />
             <PasosModal visible={showModal} onClose={() => setShowModal(false)} />

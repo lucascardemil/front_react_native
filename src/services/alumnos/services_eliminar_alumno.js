@@ -1,8 +1,9 @@
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
 
 const eliminarAlumno = async (alumnoId) => {
     try {
-        const response = await fetch(`https://back-orm.onrender.com/alumnos/${alumnoId}`, {
+        const response = await fetch(`${EXPO_Url}/alumnos/${alumnoId}`, {
             method: 'DELETE',
         });
 

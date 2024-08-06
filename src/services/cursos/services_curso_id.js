@@ -1,8 +1,9 @@
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
 
 const obtenerCursosPorIdCurso = async (curso_id) => {
     try {
-        const response = await fetch(`https://back-orm.onrender.com/cursos/${curso_id}`, {
+        const response = await fetch(`${EXPO_Url}/cursos/${curso_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,4 +1,5 @@
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
 
 const generarArrayPreguntas = (numeroPreguntas) => {
     return Array.from({ length: numeroPreguntas }, (_, index) => index);
@@ -27,7 +28,7 @@ const AgregarPrueba = async (usuario_id, preguntas, alternativas, respuestas, as
             alternativas,
         };
 
-        const response = await fetch('https://back-orm.onrender.com/hojarespuestas', {
+        const response = await fetch(`${EXPO_Url}/hojarespuestas`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

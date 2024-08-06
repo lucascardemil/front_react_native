@@ -1,10 +1,11 @@
 
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
 
 const eliminarHojasRespuestas = async (hojaId) => {
     try {
         // Realizar la solicitud DELETE
-        const response = await fetch(`https://back-orm.onrender.com/hojarespuestas/${hojaId}`, {
+        const response = await fetch(`${EXPO_Url}/hojarespuestas/${hojaId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

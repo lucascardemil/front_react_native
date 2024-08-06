@@ -1,7 +1,9 @@
 import { Alert, Text, View, StyleSheet, TouchableOpacity, Modal, Pressable } from 'react-native';
+import { EXPO_Url } from '@env';
+
 const obtenerCursosPorUser = async (user_id) => {
     try {
-        const response = await fetch(`https://back-orm.onrender.com/cursosporusuario/${user_id}`, {
+        const response = await fetch(`${EXPO_Url}/cursosporusuario/${user_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

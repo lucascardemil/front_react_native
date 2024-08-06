@@ -1,8 +1,10 @@
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
+
 
 const obtenerAlumnosPorCurso = async (curso_id) => {
     try {
-        const response = await fetch(`https://back-orm.onrender.com/alumnos/curso/${curso_id}`);
+        const response = await fetch(`${EXPO_Url}/alumnos/curso/${curso_id}`);
         if (response.ok) {
             const data = await response.json();
             return data;

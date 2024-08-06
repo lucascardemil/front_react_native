@@ -1,4 +1,5 @@
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
 
 const handlePostRequest = async ({ image, alternativas, ANSWER_KEY, data_alumno, id }) => {
 
@@ -11,7 +12,7 @@ const handlePostRequest = async ({ image, alternativas, ANSWER_KEY, data_alumno,
     };
 
     try {
-        const response = await fetch('https://back-orm.onrender.com/scanner', {
+        const response = await fetch(`${EXPO_Url}/scanner`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

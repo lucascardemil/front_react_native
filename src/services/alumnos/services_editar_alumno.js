@@ -1,9 +1,10 @@
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
 
 const editarAlumno = async (alumnoId, nuevoNombre, nuevoApellido) => {
     try {
 
-        const response = await fetch(`https://back-orm.onrender.com/alumnos/${alumnoId}`, {
+        const response = await fetch(`${EXPO_Url}/alumnos/${alumnoId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

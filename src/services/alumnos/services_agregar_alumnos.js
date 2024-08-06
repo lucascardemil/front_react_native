@@ -1,4 +1,6 @@
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
+
 
 const AgregarAlumno = async (nombre, apellido, curso) => {
     if (nombre.trim() === '') {
@@ -29,7 +31,7 @@ const AgregarAlumno = async (nombre, apellido, curso) => {
             QR
         };
 
-        const response = await fetch('https://back-orm.onrender.com/alumnos', {
+        const response = await fetch(`${EXPO_Url}/alumnos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

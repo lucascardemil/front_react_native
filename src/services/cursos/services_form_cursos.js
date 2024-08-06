@@ -1,4 +1,5 @@
 
+import { EXPO_Url } from '@env';
 const guardarCurso = async (curso) => {
     const nuevoCurso = {
         curso,
@@ -7,7 +8,7 @@ const guardarCurso = async (curso) => {
     };
 
     try {
-        const response = await fetch('https://back-orm.onrender.com/cursos', {
+        const response = await fetch(`${EXPO_Url}/cursos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

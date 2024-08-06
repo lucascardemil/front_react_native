@@ -1,10 +1,11 @@
 
 import { Alert } from 'react-native';
+import { EXPO_Url } from '@env';
 
 const obtenerHojasRespuestas = async (user_id) => {
     try {
         const usuario_id = 1; // Reemplaza 1 con el ID del usuario real
-        const response = await fetch(`https://back-orm.onrender.com/hojasrespuestasporusuario/${usuario_id}`, {
+        const response = await fetch(`${EXPO_Url}/hojasrespuestasporusuario/${usuario_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

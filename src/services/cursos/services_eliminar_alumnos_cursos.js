@@ -1,10 +1,11 @@
 import { Alert } from 'react-native';
 import eliminarCurso from '../cursos/services_eliminar_curso';
+import { EXPO_Url } from '@env';
 
 const eliminarAlumnosYCurso = async (id_curso) => {
     try {
         // Realizar la solicitud DELETE para eliminar alumnos por curso
-        const responseAlumnos = await fetch(`https://back-orm.onrender.com/eliminaralumnosporcurso/${id_curso}`, {
+        const responseAlumnos = await fetch(`${EXPO_Url}/eliminaralumnosporcurso/${id_curso}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
