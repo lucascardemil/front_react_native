@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Alert, Text, View, StyleSheet } from 'react-native';
 import { CameraView, Camera } from "expo-camera";
 import PasosModal from '../components/Modal';
 
@@ -23,9 +23,11 @@ const QRScannerScreen = ({ navigation }) => {
         setScanned(true);
         setShowModal(false);
         try {
-            navigation.navigate('Asignaturas', { data_alumno: data });
+            const correctedData = data.replace(/'/g, '"');
+            const parsedData = JSON.parse(correctedData);
+            navigation.navigate('Asignaturas', { data_alumno: parsedData });
         } catch (error) {
-            alert(`Error parsing JSON: ${error}`);
+            Alert.alert(`Error parsing JSON: ${error}`);
         }
     };
 

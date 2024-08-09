@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, Alert, ScrollView } from 'react-native';
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import CameraComponent from '../components/CameraComponent';
 import { AntDesign } from '@expo/vector-icons';
@@ -7,7 +7,6 @@ import { AntDesign } from '@expo/vector-icons';
 
 const GestionImagen = ({ route }) => {
     const { id, alternativas, preguntas, respuestas, data_alumno, imagen } = route.params;
-    // const [pickedImagePath, setPickedImagePath] = useState('');
 
     const preguntasImagen = JSON.parse(preguntas)
     const respuestasImagen = JSON.parse(respuestas)
@@ -30,8 +29,8 @@ const GestionImagen = ({ route }) => {
                         source={{ uri: imagen }}
                         style={styles.image}
                         resizeMode="contain"
-                        onError={() => console.log('Error al cargar la imagen')}
-                        onLoad={() => console.log('Imagen cargada correctamente')}
+                        onError={() => Alert.alert('Error al cargar la imagen')}
+                        onLoad={() => Alert.alert('Imagen cargada correctamente')}
                     />
                 ) : (
                     <AntDesign name="filetext1" size={150} color="white" />

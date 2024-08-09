@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Text, Pressable, View, TextInput } from 'react-native';
 import styles from '../styles/style_modal_pruebas';
 import AgregarPrueba from '../services/pruebas/services_agregar_prueba';
+import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
+import { Picker } from '@react-native-picker/picker';
 
 const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas, onPruebaAdded }) => {
-    const usuario_id = 1;
+    const user_id = 1;
     const [asignatura, setAsignatura] = useState('');
+    const [selectedCurso, setSelectedCurso] = useState();
+    const [cursos, setCursos] = useState([]);
 
     const hideConfirmModal = () => {
         onClose();
     };
+
+    useEffect(() => {
+        const fetchCursos = async () => {
+            const data_cursos = await obtenerCursosPorUser(user_id);
+            setCursos(data_cursos);
+        };
+        fetchCursos();
+    }, [user_id]);
 
     return (
 
@@ -20,7 +32,21 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas, o
             onRequestClose={hideConfirmModal}>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Ingrese el nombre de la Asignatura:</Text>
+                    <View style={styles.piker}>
+                        <Picker
+                            selectedValue={selectedCurso}
+                            onValueChange={(itemValue) => setSelectedCurso(itemValue)}>
+
+                            <Picker.Item key="0" label="Seleccione un curso" value="0" />
+                            {cursos ? (
+                                cursos.map((curso, index) => (
+                                    <Picker.Item key={index} label={curso[1]} value={curso[0]} />
+                                ))
+                            ) : (
+                                <Picker.Item label="No hay Cursos" value="0" />
+                            )}
+                        </Picker>
+                    </View>
                     <TextInput
                         style={styles.input}
                         placeholder="Ingrese la Asignatura"
@@ -36,15 +62,15 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas, o
                         <Pressable
                             style={[styles.button]}
                             onPress={async () => {
-                                const response = await AgregarPrueba(usuario_id, preguntas, alternativas, respuestas, asignatura);
+                                const response = await AgregarPrueba(preguntas, alternativas, respuestas, asignatura, selectedCurso);
                                 if (response.status === true) {
 
                                     const nuevaPrueba = [
-                                        response.hojas_respuestas.alternativas,
-                                        response.hojas_respuestas.asignatura,
-                                        response.hojas_respuestas.preguntas,
-                                        response.hojas_respuestas.respuestas,
-                                        response.hojas_respuestas.usuario_id
+                                        response.asignaturas.alternativas,
+                                        response.asignaturas.asignatura,
+                                        response.asignaturas.preguntas,
+                                        response.asignaturas.respuestas,
+                                        response.asignaturas.curso_id
                                     ];
                                     onPruebaAdded(nuevaPrueba);
                                     setAsignatura('');

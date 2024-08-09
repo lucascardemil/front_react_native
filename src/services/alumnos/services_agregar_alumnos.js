@@ -22,13 +22,10 @@ const AgregarAlumno = async (nombre, apellido, curso) => {
 
     try {
 
-        let QR = ''
-
         const alumno = {
             nombre,
             apellido,
-            id_curso: curso,
-            QR
+            curso_id: curso
         };
 
         const response = await fetch(`${EXPO_Url}/alumnos`, {

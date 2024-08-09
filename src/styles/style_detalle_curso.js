@@ -72,6 +72,12 @@ const styles = StyleSheet.create({
 		padding: 5,
 		borderRadius: 5
 	},
+    descarga: {
+		backgroundColor: '#28a745',
+		padding: 5,
+		borderRadius: 5,
+		marginRight: 5
+	},
 
 });
 

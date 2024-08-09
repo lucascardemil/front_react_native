@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import styles from '../styles/style_pruebas';
-import MisHojasRespuestas from '../components/MisHojasRespuestas'
+import VerAsignaturas from '../components/VerAsignaturas'
 
 const MisPruebas = ({ navigation, route }) => {
     const nueva_prueba = route.params === undefined ? [] : route.params.prueba;
@@ -19,7 +19,7 @@ const MisPruebas = ({ navigation, route }) => {
                     <Text style={styles.buttonText}>Nueva Prueba</Text>
                 </TouchableOpacity>
             </View>
-            <MisHojasRespuestas navigation={navigation} nueva_prueba={nueva_prueba}/>
+            <VerAsignaturas navigation={navigation} nueva_prueba={nueva_prueba}/>
         </ScrollView>
     );
 };

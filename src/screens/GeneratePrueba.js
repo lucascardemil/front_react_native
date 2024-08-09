@@ -32,7 +32,7 @@ const GeneratePrueba = () => {
                 <Picker
 
                     selectedValue={cantidadAlternativas}
-                    onValueChange={(itemValue) =>  setCantidadAlternativas(itemValue)}
+                    onValueChange={(itemValue) => setCantidadAlternativas(itemValue)}
                 >
                     {[...Array(3).keys()].map((value) => (
                         <Picker.Item key={value} label={`${value + 3}`} value={value + 3} />

@@ -2,10 +2,10 @@ import { Alert } from 'react-native';
 import eliminarCurso from '../cursos/services_eliminar_curso';
 import { EXPO_Url } from '@env';
 
-const eliminarAlumnosYCurso = async (id_curso) => {
+const eliminarAlumnosYCurso = async (curso_id) => {
     try {
         // Realizar la solicitud DELETE para eliminar alumnos por curso
-        const responseAlumnos = await fetch(`${EXPO_Url}/eliminaralumnosporcurso/${id_curso}`, {
+        const responseAlumnos = await fetch(`${EXPO_Url}/eliminaralumnosporcurso/${curso_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ const eliminarAlumnosYCurso = async (id_curso) => {
 
         if (responseAlumnos.ok) {
             // Alumnos eliminados correctamente, ahora eliminar el curso
-            const eliminar_curso = await eliminarCurso(id_curso);
+            const eliminar_curso = await eliminarCurso(curso_id);
             if(eliminar_curso){
                 return true;
             }

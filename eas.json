@@ -10,7 +10,8 @@
         "env": {
           "EXPO_Url": "https://back-orm.onrender.com"
         }
-      }
+      },
+      "channel": "development"
     },
     "preview": {
       "distribution": "internal",
@@ -19,7 +20,8 @@
         "env": {
           "EXPO_Url": "https://back-orm.onrender.com"
         }
-      }
+      },
+      "channel": "preview"
     },
     "production": {
       "distribution": "internal",
@@ -28,7 +30,8 @@
         "env": {
           "EXPO_Url": "https://back-orm.onrender.com"
         }
-      }
+      },
+      "channel": "production"
     }
   },
   "submit": {

@@ -5,7 +5,7 @@ const generarArrayPreguntas = (numeroPreguntas) => {
     return Array.from({ length: numeroPreguntas }, (_, index) => index);
 };
 
-const AgregarPrueba = async (usuario_id, preguntas, alternativas, respuestas, asignatura) => {
+const AgregarPrueba = async (preguntas, alternativas, respuestas, asignatura, curso_id) => {
     // Validar que la asignatura no esté vacía
     if (asignatura.trim() === '') {
         Alert.alert('Error', 'Ingrese la asignatura antes de continuar.');
@@ -24,11 +24,11 @@ const AgregarPrueba = async (usuario_id, preguntas, alternativas, respuestas, as
             asignatura,
             preguntas: preguntasArray,
             respuestas,
-            usuario_id,
+            curso_id,
             alternativas,
         };
 
-        const response = await fetch(`${EXPO_Url}/hojarespuestas`, {
+        const response = await fetch(`${EXPO_Url}/asignaturas`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

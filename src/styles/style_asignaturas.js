@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
 	create: {
 		width: '100%',
 		padding: 10,
+		marginTop: 20,
 		marginBottom: 20,
 		borderRadius: 5,
 		borderWidth: 2,
@@ -20,6 +21,12 @@ const styles = StyleSheet.create({
 	},
 	editar: {
 		backgroundColor: '#ffc107',
+		padding: 5,
+		borderRadius: 5,
+		marginRight: 5
+	},
+	descarga: {
+		backgroundColor: '#28a745',
 		padding: 5,
 		borderRadius: 5,
 		marginRight: 5
@@ -81,6 +88,12 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		textAlign: 'center',
 	},
+	piker: {
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#1e90ff',
+        marginBottom: 20
+    },
 });
 
 export default styles;

@@ -12,7 +12,7 @@ const CrearCursoFormulario = ({ navigation }) => {
         event.preventDefault();
         const response_guardar_curso = await guardarCurso(curso);
         if (response_guardar_curso.status === true) {
-            const response_obtener_curso_id = await obtenerCursosPorIdCurso(response_guardar_curso.id_curso);
+            const response_obtener_curso_id = await obtenerCursosPorIdCurso(response_guardar_curso.curso_id);
             if (response_obtener_curso_id.status === true) {
                 Alert.alert('Success', response_guardar_curso.mensaje);
                 navigation.navigate('Mis Cursos', { nuevoCurso: response_obtener_curso_id.curso });

@@ -1,30 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Text, View, TouchableOpacity } from 'react-native';
 import styles from '../styles/style_hojas_escaner';
-import obtenerHojasRespuestas from '../services/pruebas/services_pruebas';
+import obtenerAsignaturas from '../services/pruebas/services_asignaturas';
 import { AntDesign } from '@expo/vector-icons';
 
-const HojasScanner = ({ route, navigation }) => {
-    const user_id = 1;
+const HojasEscaner = ({ route, navigation }) => {
     const [hojasRespuestas, setHojasRespuestas] = useState([]);
     const { data_alumno } = route.params;
 
     useEffect(() => {
         const fetchHojasRespuestas = async () => {
-            const data_HojasRespuestas = await obtenerHojasRespuestas(user_id);
+            const data_HojasRespuestas = await obtenerAsignaturas(data_alumno[3]);
             setHojasRespuestas(data_HojasRespuestas);
-            console.log(data_HojasRespuestas)
         };
         fetchHojasRespuestas();
-        
-    }, [user_id]);
+
+    }, [data_alumno]);
 
     const onSelectHoja = (hoja) => {
-        if (navigation) {
-            navigation.navigate('Gestion de prueba', { id: hoja[0], alternativas: hoja[2], preguntas: hoja[3], respuestas: hoja[4], data_alumno });
-        } else {
-            console.error("Navigation prop is undefined.");
-        }
+        navigation.navigate('Gestion de prueba', { id: hoja[0], alternativas: hoja[2], preguntas: hoja[3], respuestas: hoja[4], data_alumno });
     };
 
 
@@ -38,7 +32,7 @@ const HojasScanner = ({ route, navigation }) => {
 
                             <View style={styles.rowContainer}>
                                 <TouchableOpacity style={styles.seleccionar} onPress={() => onSelectHoja(hoja)}>
-                                    <AntDesign name="select1" size={24} color="white" /> 
+                                    <AntDesign name="select1" size={24} color="white" />
                                     <Text style={styles.textButton}>Seleccionar</Text>
                                 </TouchableOpacity>
                             </View>
@@ -52,4 +46,4 @@ const HojasScanner = ({ route, navigation }) => {
     );
 };
 
-export default HojasScanner;
+export default HojasEscaner;

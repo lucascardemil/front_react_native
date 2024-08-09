@@ -8,7 +8,7 @@ const handlePostRequest = async ({ image, alternativas, ANSWER_KEY, data_alumno,
         alternativas,
         ANSWER_KEY,
         data_alumno,
-        id_hoja_de_respuestas: id
+        id
     };
 
     try {

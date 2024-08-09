@@ -58,6 +58,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 20
     },
+
+    piker: {
+        width: 300,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#1e90ff',
+        marginBottom: 20
+    },
 });
 
 export default styles;

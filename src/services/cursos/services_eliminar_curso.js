@@ -1,9 +1,9 @@
 import { Alert } from 'react-native';
 import { EXPO_Url } from '@env';
 
-const eliminarCurso = async (id_curso) => {
+const eliminarCurso = async (curso_id) => {
     try {
-        const response = await fetch(`${EXPO_Url}/cursos/${id_curso}`, {
+        const response = await fetch(`${EXPO_Url}/cursos/${curso_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

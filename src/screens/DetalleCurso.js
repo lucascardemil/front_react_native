@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollView, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { ScrollView, Text, View, TouchableOpacity, TextInput, Button, Alert } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import styles from '../styles/style_detalle_curso';
 import { AntDesign, Feather } from '@expo/vector-icons';
@@ -7,6 +7,10 @@ import ModalAlumnos from '../components/ModalAlumnos';
 import obtenerAlumnosPorCurso from '../services/alumnos/services_alumnos_curso';
 import eliminarAlumno from '../services/alumnos/services_eliminar_alumno';
 import editarAlumno from '../services/alumnos/services_editar_alumno';
+import QRCode from 'react-native-qrcode-svg';
+import ViewShot from "react-native-view-shot";
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 
 const DetalleCurso = ({ route }) => {
     const { curso } = route.params;
@@ -14,18 +18,19 @@ const DetalleCurso = ({ route }) => {
     const [editingAlumnoId, setEditingAlumnoId] = useState(null);
     const [editedAlumnoValues, setEditedAlumnoValues] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const viewShotRef = useRef(null);
+    const [alumnoString, setAlumnoString] = useState('');
 
     const onPress = () => {
         setShowModal(true);
     };
 
     const handleEditChange = (field, value) => {
-        // Actualizar los valores editados
         setEditedAlumnoValues((prevValues) => ({
             ...prevValues,
-            [field]: value, // Permitir que el valor sea vacío
+            [field]: value,
         }));
-    };    
+    };
 
     useEffect(() => {
         const fetchCursos = async () => {
@@ -38,6 +43,40 @@ const DetalleCurso = ({ route }) => {
     const handleAlumnoAdded = (nuevoAlumno) => {
         setAlumnos((prevAlumnos) => [...prevAlumnos, nuevoAlumno]);
     };
+
+    const verQrAlumno = (alumno) => {
+        setAlumnoString(JSON.stringify(alumno));
+    };
+
+    const downloadQR = async () => {
+        try {
+            if (viewShotRef.current && alumnoString) {
+                // Captura el contenido de ViewShot como PNG
+                const uri = await viewShotRef.current.capture();
+
+                const fileUri = FileSystem.documentDirectory + 'codigo_qr.png';
+                await FileSystem.moveAsync({
+                    from: uri,
+                    to: fileUri
+                });
+
+                Alert.alert('Éxito', `Código QR guardado en: ${fileUri}`);
+
+                // Compartir el archivo si el dispositivo lo permite
+                if (await Sharing.isAvailableAsync()) {
+                    await Sharing.shareAsync(fileUri);
+                } else {
+                    console.log('Compartir no disponible en este dispositivo');
+                }
+            } else {
+                Alert.alert('Error', 'No hay datos para generar el código QR.');
+            }
+        } catch (error) {
+            console.error('Error al guardar el código QR:', error);
+            Alert.alert('Error', `No se pudo guardar el código QR: ${error.message}`);
+        }
+    }
+
 
     const tableHead = ['Nombre', 'Apellido', 'Acciones'];
     const tableData = alumnos.map((alumno) => {
@@ -85,6 +124,9 @@ const DetalleCurso = ({ route }) => {
                 </TouchableOpacity>
             ) : (
                 <View style={styles.icons} key={`acciones-${alumno[0]}`}>
+                    <TouchableOpacity onPress={() => verQrAlumno(alumno)} style={styles.descarga}>
+                        <Feather name="download" size={24} color="white" />
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => setEditingAlumnoId(alumno[0])} style={styles.editar}>
                         <Feather name="edit" size={24} color="white" />
                     </TouchableOpacity>
@@ -100,7 +142,6 @@ const DetalleCurso = ({ route }) => {
             ),
         ];
     });
-
 
     return (
         <ScrollView style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20 }}>
@@ -122,6 +163,19 @@ const DetalleCurso = ({ route }) => {
                 <Row data={tableHead} style={styles.head} textStyle={styles.tableText} />
                 <Rows data={tableData} textStyle={styles.tableText} />
             </Table>
+
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 20, marginBottom: 20 }}>
+                {alumnoString ? (
+                    <ViewShot ref={viewShotRef} options={{ format: 'png', quality: 0.9 }}>
+                        <QRCode
+                            value={alumnoString}
+                            size={300}
+                        />
+                        <Button style={{ marginTop: 20, marginBottom: 20 }} title="Descargar Código QR" onPress={downloadQR} />
+                    </ViewShot>
+                ): ''}
+            </View>
+            
         </ScrollView>
     );
 };

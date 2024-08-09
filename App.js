@@ -1,3 +1,7 @@
+import 'react-native-gesture-handler';
+import { enableScreens } from 'react-native-screens';
+enableScreens();
+
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -78,7 +82,6 @@ export default function App() {
                         component={HojasEscaner}
                         options={navigationOptions}
                     />
-
                 </Stack.Navigator>
                 <Navbar />
             </NavigationContainer>

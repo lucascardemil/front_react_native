@@ -44,10 +44,10 @@ const ModalAlumnos = ({ visible, onClose, curso, onAlumnoAdded }) => {
                                 const response = await AgregarAlumno(nombre, apellido, curso[0]);
                                 if (response.status === true) {
                                     const nuevoAlumno = [
-                                        response.alumno.id_alumno,
+                                        response.alumno.alumno_id,
                                         response.alumno.nombre,
                                         response.alumno.apellido,
-                                        response.alumno.id_curso,
+                                        response.alumno.curso_id,
                                         response.alumno.qr
                                     ];
                                     onAlumnoAdded(nuevoAlumno);
