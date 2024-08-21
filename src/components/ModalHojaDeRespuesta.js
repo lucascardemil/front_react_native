@@ -5,7 +5,7 @@ import AgregarPrueba from '../services/pruebas/services_agregar_prueba';
 import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
 import { Picker } from '@react-native-picker/picker';
 
-const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas, onPruebaAdded }) => {
+const ModalHojaDeRespuesta = ({ visible, onClose, preguntas, alternativas, respuestas, onPruebaAdded }) => {
     const user_id = 1;
     const [asignatura, setAsignatura] = useState('');
     const [selectedCurso, setSelectedCurso] = useState();
@@ -62,19 +62,17 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas, o
                         <Pressable
                             style={[styles.button]}
                             onPress={async () => {
-                                const response = await AgregarPrueba(preguntas, alternativas, respuestas, asignatura, selectedCurso);
-                                if (response.status === true) {
-
-                                    const nuevaPrueba = [
-                                        response.asignaturas.alternativas,
-                                        response.asignaturas.asignatura,
-                                        response.asignaturas.preguntas,
-                                        response.asignaturas.respuestas,
-                                        response.asignaturas.curso_id
-                                    ];
-                                    onPruebaAdded(nuevaPrueba);
-                                    setAsignatura('');
-                                    onClose();
+                                try {
+                                    const response = await AgregarPrueba(preguntas, alternativas, respuestas, asignatura, selectedCurso);
+                                    if (response.status === true && response.asignaturas) {
+                                        onPruebaAdded();
+                                        setAsignatura('');
+                                        onClose();
+                                    } else {
+                                        console.error('Error: la respuesta no tiene un status true');
+                                    }
+                                } catch (error) {
+                                    console.error('Error al agregar la prueba:', error);
                                 }
                             }}>
                             <Text style={styles.textStyle}>Guardar</Text>
@@ -87,4 +85,4 @@ const ModalPruebas = ({ visible, onClose, preguntas, alternativas, respuestas, o
     );
 };
 
-export default ModalPruebas;
+export default ModalHojaDeRespuesta;

@@ -6,10 +6,10 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 const GestionImagen = ({ route }) => {
-    const { id, alternativas, preguntas, respuestas, data_alumno, imagen } = route.params;
+    const { asignatura, alumno, imagen } = route.params;
 
-    const preguntasImagen = JSON.parse(preguntas)
-    const respuestasImagen = JSON.parse(respuestas)
+    const preguntasImagen = JSON.parse(asignatura.preguntas)
+    const respuestasImagen = JSON.parse(asignatura.respuestas)
 
     const ANSWER_KEY = {};
     preguntasImagen.forEach((pregunta, index) => {
@@ -20,8 +20,8 @@ const GestionImagen = ({ route }) => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.buttonContainer}>
-                <CameraComponent data_alumno={data_alumno} alternativas={alternativas} ANSWER_KEY={ANSWER_KEY} id={id} preguntas={preguntas} respuestas={respuestas}/>
-                <ImagePickerComponent data_alumno={data_alumno} alternativas={alternativas} ANSWER_KEY={ANSWER_KEY} id={id} preguntas={preguntas} respuestas={respuestas}/>
+                <CameraComponent alumno={alumno} asignatura={asignatura} ANSWER_KEY={ANSWER_KEY} />
+                <ImagePickerComponent alumno={alumno} asignatura={asignatura} ANSWER_KEY={ANSWER_KEY}/>
             </View>
             <View style={styles.imageDefaultContainer}>
                 {imagen !== '' ? (

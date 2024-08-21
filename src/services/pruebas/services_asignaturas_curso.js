@@ -2,7 +2,7 @@
 import { Alert } from 'react-native';
 import { EXPO_Url } from '@env';
 
-const obtenerAsignaturas = async (curso_id) => {
+const obtenerAsignaturasCurso = async (curso_id) => {
     try {
         const response = await fetch(`${EXPO_Url}/asignaturasporcurso/${curso_id}`, {
             method: 'GET',
@@ -25,4 +25,4 @@ const obtenerAsignaturas = async (curso_id) => {
     }
 };
 
-export default obtenerAsignaturas;
+export default obtenerAsignaturasCurso;

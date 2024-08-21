@@ -16,35 +16,28 @@ const styles = StyleSheet.create({
 	text: {
 		color: '#343a40',
 		fontSize: 20,
-		marginLeft: 10,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		marginBottom: 20
 	},
 	editar: {
 		backgroundColor: '#ffc107',
-		padding: 5,
+		padding: 10,
 		borderRadius: 5,
-		marginRight: 5
+		marginBottom: 5
 	},
 	descarga: {
 		backgroundColor: '#28a745',
-		padding: 5,
+		padding: 10,
 		borderRadius: 5,
-		marginRight: 5
+		marginBottom: 5
 	},
 	eliminar: {
 		backgroundColor: '#dc3545',
-		padding: 5,
-		borderRadius: 5
-	},
-	rowContainerButton: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
+		padding: 10,
+		borderRadius: 5,
+		marginBottom: 5
 	},
 	rowContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
 		margin: 10,
 	},
 	centeredView: {
@@ -94,6 +87,11 @@ const styles = StyleSheet.create({
         borderColor: '#1e90ff',
         marginBottom: 20
     },
+	colorTextIcon:{
+        fontWeight: 'bold',
+        textAlign:'center',
+        color: 'white'
+    }
 });
 
 export default styles;

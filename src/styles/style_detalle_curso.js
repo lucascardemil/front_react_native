@@ -18,12 +18,6 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         marginBottom: 20
     },
-    icons: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        marginRight: 16
-    },
-
     tableText: {
         fontSize: 18,
         padding: 10,
@@ -48,36 +42,26 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: 10,
     },
-    buttonEditar: {
-        backgroundColor: '#ffc107',
-        padding: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    buttonTextEditar: {
-        color: '#FFFFFF',
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginLeft: 10,
-    },
     editar: {
 		backgroundColor: '#ffc107',
-		padding: 5,
-		borderRadius: 5,
-		marginRight: 5
+		padding: 10,
+		borderRadius: 5
 	},
     eliminar: {
 		backgroundColor: '#dc3545',
-		padding: 5,
+		padding: 10,
 		borderRadius: 5
 	},
     descarga: {
 		backgroundColor: '#28a745',
-		padding: 5,
-		borderRadius: 5,
-		marginRight: 5
+		padding: 10,
+		borderRadius: 5
 	},
+    colorTextIcon:{
+        fontWeight: 'bold',
+        textAlign:'center',
+        color: 'white'
+    }
 
 });
 

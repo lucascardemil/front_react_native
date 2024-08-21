@@ -4,11 +4,11 @@ import { AntDesign } from '@expo/vector-icons';
 import styles from '../styles/style_pruebas';
 import VerAsignaturas from '../components/VerAsignaturas'
 
-const MisPruebas = ({ navigation, route }) => {
-    const nueva_prueba = route.params === undefined ? [] : route.params.prueba;
+const MisHojaDeRespuestas = ({ navigation, route }) => {
+    const nueva_prueba = route.params === undefined ? [] : route.params.nueva_prueba;
 
     const onPressPrueba = () => {
-        navigation.navigate('Crear Prueba');
+        navigation.navigate('Crear Hoja De Respuesta');
     };
 
     return (
@@ -16,12 +16,12 @@ const MisPruebas = ({ navigation, route }) => {
             <View style={styles.container}>
                 <TouchableOpacity style={styles.button} onPress={onPressPrueba}>
                     <AntDesign name="plussquareo" size={24} color="white" />
-                    <Text style={styles.buttonText}>Nueva Prueba</Text>
+                    <Text style={styles.buttonText}>Nueva Hoja De Respuesta</Text>
                 </TouchableOpacity>
             </View>
-            <VerAsignaturas navigation={navigation} nueva_prueba={nueva_prueba}/>
+            <VerAsignaturas navigation={navigation}/>
         </ScrollView>
     );
 };
 
-export default MisPruebas;
+export default MisHojaDeRespuestas;

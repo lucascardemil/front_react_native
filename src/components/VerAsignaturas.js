@@ -1,37 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Modal, TouchableOpacity, Pressable } from 'react-native';
-import obtenerAsignaturas from '../services/pruebas/services_asignaturas';
+import { Text, View, Modal, TouchableOpacity, Pressable, Alert, Image } from 'react-native';
+import obtenerAsignaturasCurso from '../services/pruebas/services_asignaturas_curso';
 import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
 import eliminarHojasRespuestas from '../services/pruebas/services_eliminar_prueba';
-import obtenerPruebas from '../services/pruebas/services_pruebas';
-import { Feather } from '@expo/vector-icons';
 import styles from '../styles/style_asignaturas';
 import { Picker } from '@react-native-picker/picker';
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 
-const VerAsignaturas = ({ nueva_prueba }) => {
+const VerAsignaturas = () => {
     const user_id = 1;
     const [asignaturas, setAsignaturas] = useState([]);
     const [hojaAEliminar, setHojasRespuestasAEliminar] = useState(null);
     const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState(false);
-    const nuevaPrueba = nueva_prueba;
-
     const [cursos, setCursos] = useState([]);
 
     useEffect(() => {
+        setAsignaturas([])
         const fetchCursos = async () => {
             const data_cursos = await obtenerCursosPorUser(user_id);
             setCursos(data_cursos);
         };
         fetchCursos();
     }, [user_id]);
-
-    useEffect(() => {
-        if (nuevaPrueba.length > 0) {
-            setAsignaturas((prevMisHojas) => [...prevMisHojas, nuevaPrueba]);
-        }
-    }, [nuevaPrueba]);
 
     const showConfirmDeleteModal = (curso) => {
         setHojasRespuestasAEliminar(curso);
@@ -43,51 +32,13 @@ const VerAsignaturas = ({ nueva_prueba }) => {
         setConfirmDeleteModalVisible(false);
     };
 
-    const downloadAlumnos = (asignatura) => {
-        const fetchPruebas = async () => {
-            const data_pruebas = await obtenerPruebas(asignatura[0]);
-            console.log(data_pruebas)
-
-            // Convertir los datos a formato CSV
-            const csvContent = data_pruebas.map(row => `${row.nombre},${row.nota},${row.respuesta}`).join('\n');
-
-            // Obtener la fecha actual
-            const today = new Date();
-            const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0'); // Los meses empiezan desde 0
-            const year = today.getFullYear();
-
-            // Formatear la fecha como YYYYMMDD
-            const formattedDate = `${year}${month}${day}`;
-
-            // Nombre del archivo con la asignatura y la fecha
-            const fileName = `${asignatura[1]}_${formattedDate}.csv`;
-            const fileUri = `${FileSystem.documentDirectory}${fileName}`;
-
-            // Guardar el archivo CSV
-            await FileSystem.writeAsStringAsync(fileUri, csvContent, {
-                encoding: FileSystem.EncodingType.UTF8,
-            });
-
-            console.log('Archivo CSV guardado en:', fileUri);
-
-            // Compartir el archivo si el dispositivo lo permite
-            if (await Sharing.isAvailableAsync()) {
-                await Sharing.shareAsync(fileUri);
-            } else {
-                console.log('Compartir no disponible en este dispositivo');
-            }
-        };
-        fetchPruebas();
-    };
-
     return (
         <View>
             <View style={styles.piker}>
                 <Picker
                     onValueChange={(itemValue) => {
                         const fetchAsignaturas = async () => {
-                            const data_asignaturas = await obtenerAsignaturas(itemValue);
+                            const data_asignaturas = await obtenerAsignaturasCurso(itemValue[0]);
                             setAsignaturas(data_asignaturas);
                         };
                         fetchAsignaturas();
@@ -96,7 +47,7 @@ const VerAsignaturas = ({ nueva_prueba }) => {
                     <Picker.Item key="0" label="Seleccione un curso" value="0" />
                     {cursos ? (
                         cursos.map((curso, index) => (
-                            <Picker.Item key={index} label={curso[1]} value={curso[0]} />
+                            <Picker.Item key={index} label={curso[1]} value={curso} />
                         ))
                     ) : (
                         <Picker.Item label="No hay Cursos" value="0" />
@@ -108,15 +59,16 @@ const VerAsignaturas = ({ nueva_prueba }) => {
                     <View key={index} style={styles.create}>
                         <View style={styles.rowContainer}>
                             <Text style={styles.text}>{asignatura[1]}</Text>
-                            <View style={styles.rowContainerButton}>
-                                <TouchableOpacity style={styles.descarga} onPress={() => downloadAlumnos(asignatura)}>
-                                    <Feather name="download" size={24} color="white" />
-                                </TouchableOpacity>
+                            <View>
+
                                 <TouchableOpacity style={styles.eliminar} onPress={() => showConfirmDeleteModal(asignatura)}>
-                                    <Feather name="trash-2" size={24} color="white" />
+                                    <Text style={styles.colorTextIcon}>Eliminar Hoja Respuesta</Text>
                                 </TouchableOpacity>
                             </View>
+
+                            
                         </View>
+
                     </View>
                 ))
             ) : (

@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigation = useNavigation();
 
   const onPressMisPruebas = () => {
-    navigation.navigate('Mis Pruebas');
+    navigation.navigate('Mis Hoja De Respuestas');
   };
 
   const onPressInicio = () => {

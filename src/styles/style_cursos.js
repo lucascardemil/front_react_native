@@ -14,24 +14,25 @@ const styles = StyleSheet.create({
 	text: {
 		color: '#343a40',
 		fontSize: 20,
-		marginLeft: 10,
+		marginBottom: 20,
 		fontWeight: 'bold'
 	},
 	editar: {
 		backgroundColor: '#ffc107',
-		padding: 5,
+		padding: 10,
 		borderRadius: 5,
-		marginRight: 5
+		marginBottom: 5
 	},
 	eliminar: {
 		backgroundColor: '#dc3545',
-		padding: 5,
-		borderRadius: 5
+		padding: 10,
+		borderRadius: 5,
+		marginBottom: 5
 	},
-	rowContainerButton: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
+	download: {
+		backgroundColor: '#28a745',
+		padding: 10,
+		borderRadius: 5
 	},
 	rowContainer: {
 		flexDirection: 'row',
@@ -80,6 +81,18 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		textAlign: 'center',
 	},
+	colorTextIcon:{
+        fontWeight: 'bold',
+        textAlign:'center',
+        color: 'white'
+    },
+	piker: {
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#1e90ff',
+        marginBottom: 20,
+		width: 300
+    },
 });
 
 export default styles;

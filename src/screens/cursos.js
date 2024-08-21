@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import styles from '../styles/style_cursos';
 import CrearCurso from '../components/GenerarCurso';
 import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
@@ -15,11 +14,11 @@ const MisCursos = ({ navigation, route }) => {
 	const nuevoCurso = route.params?.nuevoCurso;
 
 	useEffect(() => {
-		const fetchCursos = async () => {
+		const fetchAsignatura = async () => {
 			const data_cursos = await obtenerCursosPorUser(user_id);
 			setCursos(data_cursos);
 		};
-		fetchCursos();
+		fetchAsignatura();
 
 		if (nuevoCurso) {
 			setCursos((prevCursos) => [...prevCursos, nuevoCurso]);
@@ -42,20 +41,20 @@ const MisCursos = ({ navigation, route }) => {
 	};
 
 	return (
-		<ScrollView style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20}}>
+		<ScrollView style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20 }}>
 			<View style={styles.container}>
 				<CrearCurso />
 				{cursos ? (
 					cursos.map((curso, index) => (
 						<View key={index} style={styles.create}>
-							<View style={styles.rowContainer}>
+							<View>
 								<Text style={styles.text}>{curso[1]}</Text>
-								<View style={styles.rowContainerButton}>
+								<View>
 									<TouchableOpacity style={styles.editar} onPress={() => verDetalleCurso(curso)}>
-										<Feather name="edit" size={24} color="white" />
+										<Text style={styles.colorTextIcon}>Editar Curso</Text>
 									</TouchableOpacity>
 									<TouchableOpacity style={styles.eliminar} onPress={() => showConfirmDeleteModal(curso)}>
-										<Feather name="trash-2" size={24} color="white" />
+										<Text style={styles.colorTextIcon}>Eliminar Curso</Text>
 									</TouchableOpacity>
 								</View>
 							</View>
@@ -100,6 +99,7 @@ const MisCursos = ({ navigation, route }) => {
 						</View>
 					</View>
 				</Modal>
+
 			</View>
 		</ScrollView>
 	);

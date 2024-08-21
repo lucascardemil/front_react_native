@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
 import { CameraView, Camera } from "expo-camera";
 import PasosModal from '../components/Modal';
+import obtenerAsignaturas from '../services/pruebas/services_asignaturas_id';
 
 const QRScannerScreen = ({ navigation }) => {
     const [showModal, setShowModal] = useState(false);
@@ -19,13 +20,25 @@ const QRScannerScreen = ({ navigation }) => {
     }, []);
 
 
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = async ({ type, data }) => {
         setScanned(true);
         setShowModal(false);
         try {
-            const correctedData = data.replace(/'/g, '"');
-            const parsedData = JSON.parse(correctedData);
-            navigation.navigate('Asignaturas', { data_alumno: parsedData });
+            // Dividir la cadena en partes
+            const parts = data.split(" ");
+
+            // Crear un objeto JSON con las partes
+            const alumno = {
+                id: parseInt(parts[0], 10),
+                nombre: parts[1],
+                apellido: parts[2],
+                curso_id: parseInt(parts[3], 10),
+                asignatura: parts[4]
+            };
+
+            const asignatura = await obtenerAsignaturas(alumno['asignatura']);
+            console.log(asignatura)
+            navigation.navigate('Gestion de prueba', { asignatura, alumno });
         } catch (error) {
             Alert.alert(`Error parsing JSON: ${error}`);
         }

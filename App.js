@@ -10,12 +10,11 @@ import Navbar from './src/components/Navbar';
 import QRScannerScreen from './src/screens/LectorQR';
 import CameraComponent from './src/components/CameraComponent';
 import GeneratePrueba from './src/screens/GeneratePrueba';
-import MisPruebas from './src/screens/MisPruebas';
+import MisHojaDeRespuestas from './src/screens/MisHojaDeRespuestas';
 import MisCursos from './src/screens/Cursos';
 import DetalleCurso from './src/screens/DetalleCurso';
 import CrearCursoFormulario from './src/screens/FormCursos';
 import GestionImagen from './src/screens/GestionImagen';
-import HojasEscaner from './src/screens/HojasEscaner';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
@@ -48,13 +47,13 @@ export default function App() {
                         options={navigationOptions}
                     />
                     <Stack.Screen
-                        name="Crear Prueba"
+                        name="Crear Hoja De Respuesta"
                         component={GeneratePrueba}
                         options={navigationOptions}
                     />
                     <Stack.Screen
-                        name="Mis Pruebas"
-                        component={MisPruebas}
+                        name="Mis Hoja De Respuestas"
+                        component={MisHojaDeRespuestas}
                         options={navigationOptions}
                     />
                     <Stack.Screen
@@ -75,11 +74,6 @@ export default function App() {
                     <Stack.Screen
                         name="Gestion de prueba"
                         component={GestionImagen}
-                        options={navigationOptions}
-                    />
-                    <Stack.Screen
-                        name="Asignaturas"
-                        component={HojasEscaner}
                         options={navigationOptions}
                     />
                 </Stack.Navigator>

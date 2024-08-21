@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import GenerarFormulario from '../components/GenerarFormulario';
+import GenerarFormulario from '../components/GenerarHojaDeRepuesta';
 import { Picker } from '@react-native-picker/picker';
 
 const GeneratePrueba = () => {

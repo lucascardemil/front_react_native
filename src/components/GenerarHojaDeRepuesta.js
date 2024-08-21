@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Button, Alert } from 'react-native';
-import ModalPruebas from '../components/ModalPrueba';
+import ModalHojaDeRespuesta from './ModalHojaDeRespuesta';
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
 const Alternativa = ({ indice, onPress, isSelected }) => (
     <TouchableOpacity onPress={onPress}>
@@ -12,7 +12,7 @@ const Alternativa = ({ indice, onPress, isSelected }) => (
     </TouchableOpacity>
 );
 
-const GenerarFormulario = ({ preguntas, alternativas }) => {
+const GenerarHojaDeRepuesta = ({ preguntas, alternativas }) => {
     const [respuestas, setRespuestas] = useState(Array(preguntas).fill(null));
     const [showModal, setShowModal] = useState(false);
     const navigation = useNavigation();
@@ -39,8 +39,13 @@ const GenerarFormulario = ({ preguntas, alternativas }) => {
         }
     };
 
-    const handlePruebaAdded = (nuevaPrueba) => {
-        navigation.navigate('Mis Pruebas', {'prueba': nuevaPrueba});
+    const handlePruebaAdded = () => {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'Mis Hoja De Respuestas' }],
+            })
+        );
     };
 
     return (
@@ -64,10 +69,10 @@ const GenerarFormulario = ({ preguntas, alternativas }) => {
 
                 <TouchableOpacity style={styles.button} onPress={handleSubirPrueba}>
                     <AntDesign name="plussquareo" size={24} color="white" />
-                    <Text style={styles.buttonText}>Subir Prueba</Text>
+                    <Text style={styles.buttonText}>Subir Hoja De Respuesta</Text>
                 </TouchableOpacity>
 
-                <ModalPruebas
+                <ModalHojaDeRespuesta
                     visible={showModal}
                     respuestas={respuestas}
                     preguntas={preguntas}
@@ -125,4 +130,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default GenerarFormulario;
+export default GenerarHojaDeRepuesta;

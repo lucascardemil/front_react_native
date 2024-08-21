@@ -6,47 +6,53 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import handlePostRequest from '../services/scanner/services_seleccionar_archivo';
 
-export default function CameraComponent({ id, alternativas, preguntas, respuestas, data_alumno, ANSWER_KEY}) {
+export default function CameraComponent({ alumno, asignatura, ANSWER_KEY }) {
     const navigation = useNavigation();
 
     const handleTomarFoto = async () => {
 
-        // Solicitar permisos para usar la cámara
-        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-
+        // Solicitar permisos para usar la biblioteca de medios
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
         if (permissionResult.granted === false) {
-            alert("You've refused to allow this app to access your camera!");
+            alert("You've refused to allow this app to access your photos!");
             return;
         }
-
-        // Lanzar la cámara
-        const result = await ImagePicker.launchCameraAsync();
-
+    
+        // Lanzar la biblioteca de imágenes
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+            quality: 1, // calidad máxima
+        });
+    
         if (result.canceled) {
-            navigation.navigate('Gestion de prueba', { id: id, alternativas: alternativas, preguntas: preguntas, respuestas: respuestas, data_alumno: data_alumno, ANSWER_KEY: ANSWER_KEY, imagen: '' });
+            navigation.navigate('Gestion de prueba', { alumno, asignatura, imagen: '' });
             return;
         }
-
+    
         try {
             // Obtener información del archivo
             const fileInfo = await FileSystem.getInfoAsync(result.assets[0].uri);
-
+    
             if (!fileInfo.exists) {
                 alert("El archivo no existe.");
                 return;
             }
-
-            // Leer el archivo como una cadena base64
-            const image = await FileSystem.readAsStringAsync(fileInfo.uri, {
-                encoding: FileSystem.EncodingType.Base64,
+    
+            // Enviar la imagen como archivo binario
+            const response = await handlePostRequest({
+                id: asignatura.id,
+                alumno,
+                alternativas: asignatura.alternativas,
+                ANSWER_KEY,
+                imageUri: fileInfo.uri,
+                total_columnas: asignatura.total_columnas,
             });
-
-            // Enviar la imagen codificada en base64 a la función de manejo de la solicitud
-            const response = await handlePostRequest({ image, alternativas, ANSWER_KEY, data_alumno, id });
-
+    
             if (response && response.image) {
                 // Establecer la ruta de la imagen seleccionada
-                navigation.navigate('Gestion de prueba', { id: id, alternativas: alternativas, preguntas: preguntas, respuestas: respuestas, data_alumno: data_alumno, ANSWER_KEY: ANSWER_KEY, imagen: response.image });
+                navigation.navigate('Gestion de prueba', { alumno, asignatura, imagen: response.image });
             } else {
                 alert("Error al procesar la imagen.");
             }
