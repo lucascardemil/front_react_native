@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Text, Pressable, View, TextInput } from 'react-native';
+import { Modal, Text, Pressable, View, TextInput,Alert } from 'react-native';
 import styles from '../styles/style_modal_pruebas';
 import AgregarPrueba from '../services/pruebas/services_agregar_prueba';
 import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
@@ -69,10 +69,10 @@ const ModalHojaDeRespuesta = ({ visible, onClose, preguntas, alternativas, respu
                                         setAsignatura('');
                                         onClose();
                                     } else {
-                                        console.error('Error: la respuesta no tiene un status true');
+                                        Alert.alert('Error', 'No se pudo crear la hoja de respuesta');
                                     }
                                 } catch (error) {
-                                    console.error('Error al agregar la prueba:', error);
+                                    Alert.alert('Error', 'Error con el servicios de crear la prueba');
                                 }
                             }}>
                             <Text style={styles.textStyle}>Guardar</Text>

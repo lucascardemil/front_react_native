@@ -36,15 +36,17 @@ const AgregarPrueba = async (preguntas, alternativas, respuestas, asignatura, cu
             body: JSON.stringify(datosHojadeRespuestas),
         });
 
-        // Manejar la respuesta
-        if (response.ok) {
-            const data = await response.json();
+
+        const data = await response.json();
+
+        if (data.status) {
             return data;
         } else {
-            // Manejar errores de la respuesta
-            console.error('Error en la respuesta:', response.statusText);
-            Alert.alert('Error', 'Hubo un problema al enviar la solicitud.');
+            Alert.alert('Error', data.error || 'Hubo un problema al crear la prueba.');
+            return null;
         }
+        
+
     } catch (error) {
         // Manejar errores de la solicitud
         console.error('Error al enviar la solicitud:', error.message);
