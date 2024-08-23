@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
 		elevation: 5,
     },
     button: {
+        width: 150,
         backgroundColor: '#0780F8',
         padding: 10,
         borderRadius: 5,
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     buttonClose: {
+        width: 150,
         backgroundColor: '#dc3545',
         padding: 10,
         borderRadius: 5,
@@ -38,6 +40,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     textStyle: {
+        fontSize: 16,
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',

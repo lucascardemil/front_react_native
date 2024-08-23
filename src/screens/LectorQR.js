@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Alert, Text, View, StyleSheet } from 'react-native';
 import { CameraView, Camera } from "expo-camera";
 import PasosModal from '../components/Modal';
-import obtenerAsignaturas from '../services/pruebas/services_asignaturas_id';
+import obtenerAsignaturas from '../services/pruebas/services_asignaturas_nombre';
 
 const QRScannerScreen = ({ navigation }) => {
     const [showModal, setShowModal] = useState(false);

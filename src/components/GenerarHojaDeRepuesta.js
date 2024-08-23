@@ -43,16 +43,15 @@ const GenerarHojaDeRepuesta = ({ preguntas, alternativas }) => {
 
     const handlePruebaAdded = (hojaDeRespuesta) => {
         setIsLoading(true);
-        if (hojaDeRespuesta) {
-            setTimeout(() => {
-                navigation.dispatch(
-                    CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: 'Mis Hoja De Respuestas' }],
-                    })
-                );
-                setIsLoading(false);
-            }, 2000);
+        if (hojaDeRespuesta.status) {
+            setIsLoading(false);
+            Alert.alert('Correcto', hojaDeRespuesta.mensaje);
+            navigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'Mis Hoja De Respuestas' }],
+                })
+            );
         }
     };
 
@@ -89,7 +88,7 @@ const GenerarHojaDeRepuesta = ({ preguntas, alternativas }) => {
                     onPruebaAdded={handlePruebaAdded} />
             </View>
         </ScrollView>
-            {isLoading && ( 
+            {isLoading && (
                 <Cargando />
             )}
         </>

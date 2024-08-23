@@ -3,6 +3,8 @@ import { Text, View, Modal, TouchableOpacity, Pressable, Alert, ScrollView } fro
 import obtenerAsignaturasCurso from '../services/pruebas/services_asignaturas_curso';
 import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
 import eliminarHojasRespuestas from '../services/pruebas/services_eliminar_prueba';
+import generarFormatosAlumnos from  '../services/pruebas/services_generar_formatos';
+import obtenerCursosPorIdCurso from '../services/cursos/services_curso_id';
 import styles from '../styles/style_asignaturas';
 import { Picker } from '@react-native-picker/picker';
 import Cargando from '../components/Cargando';
@@ -32,6 +34,21 @@ const VerAsignaturas = () => {
     const hideConfirmDeleteModal = () => {
         setHojasRespuestasAEliminar(null);
         setConfirmDeleteModalVisible(false);
+    };
+
+    const generarFormatos = async (asignatura) => {
+        try {
+            // Obtener cursos relacionados con el ID de la asignatura
+            const result_cursos = await obtenerCursosPorIdCurso(asignatura[5]);
+            
+            // Si se obtienen los cursos correctamente, generar los formatos
+            if (result_cursos) {
+                // Suponiendo que generarFormatosCurso es la función para generar los formatos
+                await generarFormatosAlumnos(result_cursos.curso['curso'], asignatura[1]);
+            }
+        } catch (error) {
+            console.error('Error al generar los formatos:', error.message);
+        }
     };
 
     return (
@@ -72,12 +89,14 @@ const VerAsignaturas = () => {
                         <View key={index} style={styles.create}>
                             <View style={styles.rowContainer}>
                                 <Text style={styles.text}>{asignatura[1]}</Text>
-                                {/* <View>
-
-                                    <TouchableOpacity style={styles.eliminar} onPress={() => showConfirmDeleteModal(asignatura)}>
+                                <View>
+                                    {/* <TouchableOpacity style={styles.eliminar} onPress={() => showConfirmDeleteModal(asignatura)}>
                                         <Text style={styles.colorTextIcon}>Eliminar Hoja Respuesta</Text>
+                                    </TouchableOpacity> */}
+                                    <TouchableOpacity style={styles.descarga} onPress={() => generarFormatos(asignatura)}>
+                                        <Text style={styles.colorTextIcon}>Generar Formatos</Text>
                                     </TouchableOpacity>
-                                </View> */}
+                                </View>
                             </View>
                         </View>
                     ))

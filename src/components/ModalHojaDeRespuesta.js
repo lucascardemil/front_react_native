@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Text, Pressable, View, TextInput, Alert } from 'react-native';
+import { Modal, Text, TouchableOpacity, View, TextInput, Alert } from 'react-native';
 import styles from '../styles/style_modal_pruebas';
 import AgregarPrueba from '../services/pruebas/services_agregar_prueba';
 import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
@@ -10,6 +10,7 @@ const ModalHojaDeRespuesta = ({ visible, onClose, preguntas, alternativas, respu
     const [asignatura, setAsignatura] = useState('');
     const [selectedCurso, setSelectedCurso] = useState();
     const [cursos, setCursos] = useState([]);
+    
 
     const hideConfirmModal = () => {
         onClose();
@@ -25,11 +26,10 @@ const ModalHojaDeRespuesta = ({ visible, onClose, preguntas, alternativas, respu
 
 
     const crearHojaDeRespuesta = async () => {
-        
         try {
             const response = await AgregarPrueba(preguntas, alternativas, respuestas, asignatura, selectedCurso);
             if (response !== undefined && response.status === true) {
-                onPruebaAdded(response.asignaturas);
+                onPruebaAdded(response);
                 setAsignatura('');
                 onClose();
             }
@@ -39,51 +39,51 @@ const ModalHojaDeRespuesta = ({ visible, onClose, preguntas, alternativas, respu
     }
 
     return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={visible}
+                onRequestClose={hideConfirmModal}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <View style={styles.piker}>
+                            <Picker
+                                selectedValue={selectedCurso}
+                                onValueChange={(itemValue) => setSelectedCurso(itemValue)}>
 
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={visible}
-            onRequestClose={hideConfirmModal}>
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <View style={styles.piker}>
-                        <Picker
-                            selectedValue={selectedCurso}
-                            onValueChange={(itemValue) => setSelectedCurso(itemValue)}>
-
-                            <Picker.Item key="0" label="Seleccione un curso" value="0" />
-                            {cursos ? (
-                                cursos.map((curso, index) => (
-                                    <Picker.Item key={index} label={curso[1]} value={curso[0]} />
-                                ))
-                            ) : (
-                                <Picker.Item label="No hay Cursos" value="0" />
-                            )}
-                        </Picker>
-                    </View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Ingrese la Asignatura"
-                        value={asignatura}
-                        onChangeText={(text) => setAsignatura(text)}
-                    />
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 300 }}>
-                        <Pressable
-                            style={[styles.buttonClose]}
-                            onPress={hideConfirmModal}>
-                            <Text style={styles.textStyle}>Cancelar</Text>
-                        </Pressable>
-                        <Pressable
-                            style={[styles.button]}
-                            onPress={crearHojaDeRespuesta}>
-                            <Text style={styles.textStyle}>Guardar</Text>
-                        </Pressable>
+                                <Picker.Item key="0" label="Seleccione un curso" value="0" />
+                                {cursos ? (
+                                    cursos.map((curso, index) => (
+                                        <Picker.Item key={index} label={curso[1]} value={curso[0]} />
+                                    ))
+                                ) : (
+                                    <Picker.Item label="No hay Cursos" value="0" />
+                                )}
+                            </Picker>
+                        </View>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Ingrese la Asignatura"
+                            value={asignatura}
+                            onChangeText={(text) => setAsignatura(text)}
+                        />
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 300 }}>
+                            <TouchableOpacity
+                                style={[styles.buttonClose]}
+                                onPress={hideConfirmModal}
+                                activeOpacity={0.7}>
+                                <Text style={styles.textStyle}>Cancelar</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.button]}
+                                onPress={crearHojaDeRespuesta}
+                                activeOpacity={0.7}>
+                                <Text style={styles.textStyle}>Guardar</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </View>
-        </Modal>
-
+            </Modal>
     );
 };
 
