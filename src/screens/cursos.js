@@ -4,7 +4,7 @@ import styles from '../styles/style_cursos';
 import CrearCurso from '../components/GenerarCurso';
 import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
 import eliminarAlumnosYCurso from '../services/cursos/services_eliminar_alumnos_cursos';
-
+import Cargando from '../components/Cargando';
 
 const MisCursos = ({ navigation, route }) => {
 	const user_id = 1;
@@ -12,11 +12,19 @@ const MisCursos = ({ navigation, route }) => {
 	const [cursoAEliminar, setCursoAEliminar] = useState(null);
 	const [confirmDeleteModalVisible, setConfirmDeleteModalVisible] = useState(false);
 	const nuevoCurso = route.params?.nuevoCurso;
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchAsignatura = async () => {
-			const data_cursos = await obtenerCursosPorUser(user_id);
-			setCursos(data_cursos);
+			try {
+				setIsLoading(true);
+				const data_cursos = await obtenerCursosPorUser(user_id);
+				setCursos(data_cursos);
+			} catch (error) {
+				console.error("Error al obtener los cursos:", error);
+			} finally {
+				setIsLoading(false);
+			}
 		};
 		fetchAsignatura();
 
@@ -40,8 +48,27 @@ const MisCursos = ({ navigation, route }) => {
 		setConfirmDeleteModalVisible(false);
 	};
 
+
+	const eliminarCurso = async () => {
+		try {
+			setIsLoading(true);
+			const response = await eliminarAlumnosYCurso(cursoAEliminar[0]);
+			if (response) {
+				setCursos((prevCursos) => prevCursos.filter((curso) => curso[0] !== cursoAEliminar[0]));
+			}
+		} catch (error) {
+			console.error("Error al eliminar el curso:", error);
+		} finally {
+			hideConfirmDeleteModal();
+			setTimeout(() => {
+				setIsLoading(false);
+			}, 2000);
+		}
+	};
+
+
 	return (
-		<ScrollView style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20 }}>
+		<><ScrollView style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20 }}>
 			<View style={styles.container}>
 				<CrearCurso />
 				{cursos ? (
@@ -86,22 +113,19 @@ const MisCursos = ({ navigation, route }) => {
 								</Pressable>
 								<Pressable
 									style={[styles.buttonbg, styles.eliminar]}
-									onPress={async () => {
-										hideConfirmDeleteModal();
-										const response = await eliminarAlumnosYCurso(cursoAEliminar[0]);
-										if (response) {
-											setCursos((prevCursos) => prevCursos.filter((curso) => curso[0] !== cursoAEliminar[0]));
-										}
-									}}>
+									>
 									<Text style={styles.textStyle}>Eliminar</Text>
 								</Pressable>
 							</View>
 						</View>
 					</View>
 				</Modal>
-
 			</View>
 		</ScrollView>
+		{isLoading && (
+			<Cargando />
+		)}
+	</>
 	);
 };
 

@@ -37,7 +37,6 @@ const QRScannerScreen = ({ navigation }) => {
             };
 
             const asignatura = await obtenerAsignaturas(alumno['asignatura']);
-            console.log(asignatura)
             navigation.navigate('Gestion de prueba', { asignatura, alumno });
         } catch (error) {
             Alert.alert(`Error parsing JSON: ${error}`);

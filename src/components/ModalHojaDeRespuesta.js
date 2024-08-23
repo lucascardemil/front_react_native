@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Text, Pressable, View, TextInput,Alert } from 'react-native';
+import { Modal, Text, Pressable, View, TextInput, Alert } from 'react-native';
 import styles from '../styles/style_modal_pruebas';
 import AgregarPrueba from '../services/pruebas/services_agregar_prueba';
 import obtenerCursosPorUser from '../services/cursos/services_cursos_id_user';
@@ -22,6 +22,21 @@ const ModalHojaDeRespuesta = ({ visible, onClose, preguntas, alternativas, respu
         };
         fetchCursos();
     }, [user_id]);
+
+
+    const crearHojaDeRespuesta = async () => {
+        
+        try {
+            const response = await AgregarPrueba(preguntas, alternativas, respuestas, asignatura, selectedCurso);
+            if (response !== undefined && response.status === true) {
+                onPruebaAdded(response.asignaturas);
+                setAsignatura('');
+                onClose();
+            }
+        } catch (error) {
+            Alert.alert('Error', error.message || 'Hubo un problema al crear la hoja de respuestas.');
+        }
+    }
 
     return (
 
@@ -61,20 +76,7 @@ const ModalHojaDeRespuesta = ({ visible, onClose, preguntas, alternativas, respu
                         </Pressable>
                         <Pressable
                             style={[styles.button]}
-                            onPress={async () => {
-                                try {
-                                    const response = await AgregarPrueba(preguntas, alternativas, respuestas, asignatura, selectedCurso);
-                                    if (response.status === true && response.asignaturas) {
-                                        onPruebaAdded();
-                                        setAsignatura('');
-                                        onClose();
-                                    } else {
-                                        Alert.alert('Error', 'No se pudo crear la hoja de respuesta');
-                                    }
-                                } catch (error) {
-                                    Alert.alert('Error', 'Error con el servicios de crear la prueba');
-                                }
-                            }}>
+                            onPress={crearHojaDeRespuesta}>
                             <Text style={styles.textStyle}>Guardar</Text>
                         </Pressable>
                     </View>

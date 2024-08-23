@@ -4,10 +4,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
         paddingLeft: 20, 
         paddingRight: 20, 
-        marginBottom: 20
     },
     input: {
         width:'100%',
@@ -34,7 +32,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginLeft: 10,
-    }
+    },
+    errorText: {
+        color: 'red',
+        marginBottom: 10,
+    },
 });
 
 export default styles;

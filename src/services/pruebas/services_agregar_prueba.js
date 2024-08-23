@@ -6,13 +6,16 @@ const generarArrayPreguntas = (numeroPreguntas) => {
 };
 
 const AgregarPrueba = async (preguntas, alternativas, respuestas, asignatura, curso_id) => {
-    // Validar que la asignatura no esté vacía
+
+    if(curso_id === undefined || curso_id === 0){
+        Alert.alert('Error', 'Seleccione un curso');
+        return;
+    }
     if (asignatura.trim() === '') {
         Alert.alert('Error', 'Ingrese la asignatura antes de continuar.');
         return;
     }
     if (asignatura.length > 16) {
-        x
         Alert.alert('Error', 'La asignatura no puede tener más de 16 caracteres.');
         return;
     }
@@ -35,7 +38,6 @@ const AgregarPrueba = async (preguntas, alternativas, respuestas, asignatura, cu
             },
             body: JSON.stringify(datosHojadeRespuestas),
         });
-
 
         const data = await response.json();
 

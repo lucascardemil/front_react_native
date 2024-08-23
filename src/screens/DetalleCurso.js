@@ -1,12 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { ScrollView, Text, View, TouchableOpacity, TextInput, Button, Alert, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, Text, View, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Table, Row, Rows } from 'react-native-table-component';
 import styles from '../styles/style_detalle_curso';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import ModalAlumnos from '../components/ModalAlumnos';
 import obtenerAlumnosPorCurso from '../services/alumnos/services_alumnos_curso';
 import eliminarAlumno from '../services/alumnos/services_eliminar_alumno';
 import editarAlumno from '../services/alumnos/services_editar_alumno';
+import Cargando from '../components/Cargando';
 
 const DetalleCurso = ({ route }) => {
     const { curso } = route.params;
@@ -14,6 +15,7 @@ const DetalleCurso = ({ route }) => {
     const [editingAlumnoId, setEditingAlumnoId] = useState(null);
     const [editedAlumnoValues, setEditedAlumnoValues] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const onPress = () => {
         setShowModal(true);
@@ -35,8 +37,51 @@ const DetalleCurso = ({ route }) => {
     }, [curso]);
 
     const handleAlumnoAdded = (nuevoAlumno) => {
+        setIsLoading(true);
         setAlumnos((prevAlumnos) => [...prevAlumnos, nuevoAlumno]);
+
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2000);
     };
+
+    const editar = async (nombre, apellido, alumno) => {
+        try {
+            setIsLoading(true);
+            const nuevoNombre = editedAlumnoValues.nombre?.trim() ?? nombre;
+            const nuevoApellido = editedAlumnoValues.apellido?.trim() ?? apellido;
+            const alumnoId = await editarAlumno(alumno, nuevoNombre, nuevoApellido);
+
+            if (alumnoId) {
+                const nuevosAlumnos = alumnos.map(a => a[0] === alumnoId ? [a[0], nuevoNombre, nuevoApellido] : a);
+                setAlumnos(nuevosAlumnos);
+                setEditingAlumnoId(null);
+                setEditedAlumnoValues({});
+            }
+        } catch (error) {
+            Alert.alert("Error", error);
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
+        }
+    }
+
+    const eliminar = async (alumno) => {
+        try {
+            setIsLoading(true);
+            const alumnoId = await eliminarAlumno(alumno);
+            if (alumnoId) {
+                setAlumnos(alumnos.filter(a => a[0] !== alumnoId));
+            }
+        } catch (error) {
+            Alert.alert("Error", error);
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 2000);
+        }
+    }
 
     const tableHead = ['Nombre', 'Apellido', 'Acciones'];
     const tableData = alumnos.map((alumno) => {
@@ -68,18 +113,7 @@ const DetalleCurso = ({ route }) => {
                 <Text key={`apellido-${alumno[0]}`} style={styles.tableText}>{apellido}</Text>
             ),
             isEditing ? (
-                <TouchableOpacity key={`acciones-${alumno[0]}`} onPress={async () => {
-                    const nuevoNombre = editedAlumnoValues.nombre?.trim() ?? nombre;
-                    const nuevoApellido = editedAlumnoValues.apellido?.trim() ?? apellido;
-                    const alumnoId = await editarAlumno(alumno[0], nuevoNombre, nuevoApellido);
-
-                    if (alumnoId) {
-                        const nuevosAlumnos = alumnos.map(a => a[0] === alumnoId ? [a[0], nuevoNombre, nuevoApellido] : a);
-                        setAlumnos(nuevosAlumnos);
-                        setEditingAlumnoId(null);
-                        setEditedAlumnoValues({});
-                    }
-                }} style={styles.descarga}>
+                <TouchableOpacity key={`acciones-${alumno[0]}`} onPress={(event) => { event.preventDefault(); editar(nombre, apellido, alumno[0]) }} style={styles.descarga}>
                     <Text style={styles.colorTextIcon}>Guardar Cambios</Text>
                 </TouchableOpacity>
             ) : (
@@ -87,12 +121,7 @@ const DetalleCurso = ({ route }) => {
                     <TouchableOpacity onPress={() => setEditingAlumnoId(alumno[0])} style={styles.editar}>
                         <Text style={styles.colorTextIcon}>Editar Alumno</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={async () => {
-                        const alumnoId = await eliminarAlumno(alumno[0]);
-                        if (alumnoId) {
-                            setAlumnos(alumnos.filter(a => a[0] !== alumnoId));
-                        }
-                    }} style={styles.eliminar}>
+                    <TouchableOpacity onPress={(event) => { event.preventDefault(); eliminar(alumno[0]) }} style={styles.eliminar}>
                         <Text style={styles.colorTextIcon}>Eliminar Alumno</Text>
                     </TouchableOpacity>
                 </View>
@@ -101,7 +130,7 @@ const DetalleCurso = ({ route }) => {
     });
 
     return (
-        <ScrollView style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20 }}>
+        <><ScrollView style={{ paddingLeft: 20, paddingRight: 20, marginBottom: 20 }}>
             <View style={styles.container_general}>
                 <Text style={styles.text}>{curso[1]}</Text>
                 <View style={styles.container}>
@@ -121,6 +150,10 @@ const DetalleCurso = ({ route }) => {
                 <Rows data={tableData} textStyle={styles.tableText} />
             </Table>
         </ScrollView>
+            {isLoading && (
+                <Cargando />
+            )}
+        </>
     );
 };
 

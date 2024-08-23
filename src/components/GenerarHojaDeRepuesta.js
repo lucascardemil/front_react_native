@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import ModalHojaDeRespuesta from './ModalHojaDeRespuesta';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
+import Cargando from '../components/Cargando';
 
 const Alternativa = ({ indice, onPress, isSelected }) => (
     <TouchableOpacity onPress={onPress}>
@@ -16,6 +17,7 @@ const GenerarHojaDeRepuesta = ({ preguntas, alternativas }) => {
     const [respuestas, setRespuestas] = useState(Array(preguntas).fill(null));
     const [showModal, setShowModal] = useState(false);
     const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleRespuestaChange = (index, value) => {
         const nuevasRespuestas = [...respuestas];
@@ -39,17 +41,23 @@ const GenerarHojaDeRepuesta = ({ preguntas, alternativas }) => {
         }
     };
 
-    const handlePruebaAdded = () => {
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'Mis Hoja De Respuestas' }],
-            })
-        );
+    const handlePruebaAdded = (hojaDeRespuesta) => {
+        setIsLoading(true);
+        if (hojaDeRespuesta) {
+            setTimeout(() => {
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: 'Mis Hoja De Respuestas' }],
+                    })
+                );
+                setIsLoading(false);
+            }, 2000);
+        }
     };
 
     return (
-        <ScrollView>
+        <><ScrollView>
             <View style={styles.container}>
                 {[...Array(preguntas).keys()].map((index) => (
                     <View key={index} style={styles.preguntaContainer}>
@@ -81,6 +89,10 @@ const GenerarHojaDeRepuesta = ({ preguntas, alternativas }) => {
                     onPruebaAdded={handlePruebaAdded} />
             </View>
         </ScrollView>
+            {isLoading && ( 
+                <Cargando />
+            )}
+        </>
     );
 };
 
@@ -114,7 +126,7 @@ const styles = StyleSheet.create({
         borderColor: 'white',
     },
     button: {
-        width:'100%',
+        width: '100%',
         backgroundColor: '#1e90ff',
         padding: 10,
         borderRadius: 5,

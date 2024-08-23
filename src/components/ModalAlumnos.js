@@ -11,6 +11,28 @@ const ModalAlumnos = ({ visible, onClose, curso, onAlumnoAdded }) => {
         onClose();
     };
 
+    const crearAlumno = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await AgregarAlumno(nombre, apellido, curso[0]);
+            if (response.status === true) {
+                const nuevoAlumno = [
+                    response.alumno.id,
+                    response.alumno.nombre,
+                    response.alumno.apellido,
+                    response.alumno.curso_id
+                ];
+
+                onAlumnoAdded(nuevoAlumno);
+                setNombre('');
+                setApellido('');
+                onClose();
+            }
+        } catch (error) {
+            console.error("Error al crear el alumno:", error);
+        }
+    };
+
     return (
 
         <Modal
@@ -40,22 +62,7 @@ const ModalAlumnos = ({ visible, onClose, curso, onAlumnoAdded }) => {
                         </Pressable>
                         <Pressable
                             style={[styles.button]}
-                            onPress={async () => {
-                                const response = await AgregarAlumno(nombre, apellido, curso[0]);
-                                if (response.status === true) {
-                                    const nuevoAlumno = [
-                                        response.alumno.alumno_id,
-                                        response.alumno.nombre,
-                                        response.alumno.apellido,
-                                        response.alumno.curso_id,
-                                        response.alumno.qr
-                                    ];
-                                    onAlumnoAdded(nuevoAlumno);
-                                    setNombre('');
-                                    setApellido('');
-                                    onClose();
-                                }
-                            }}>
+                            onPress={crearAlumno}>
                             <Text style={styles.textStyle}>Guardar</Text>
                         </Pressable>
                     </View>

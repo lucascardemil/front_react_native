@@ -1,8 +1,7 @@
 import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
 	container: {
-		marginTop: 20,
-        marginBottom: 20
+		margin: 20
 	},
 	create: {
 		width: '100%',
@@ -81,21 +80,21 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		textAlign: 'center',
 	},
-    button: {
-        width: '100%',
-        backgroundColor: '#1e90ff',
-        padding: 10,
-        borderRadius: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    buttonText: {
-        color: '#FFFFFF',
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginLeft: 10,
-    }
+	button: {
+		width: '100%',
+		backgroundColor: '#1e90ff',
+		padding: 10,
+		borderRadius: 5,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	buttonText: {
+		color: '#FFFFFF',
+		fontSize: 20,
+		fontWeight: 'bold',
+		marginLeft: 10,
+	}
 });
 
 export default styles;
