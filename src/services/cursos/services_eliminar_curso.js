@@ -2,26 +2,32 @@ import { Alert } from 'react-native';
 import { EXPO_Url } from '@env';
 
 const eliminarCurso = async (curso_id) => {
-    try {
-        const response = await fetch(`${EXPO_Url}/cursos/${curso_id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+  if (!curso_id || curso_id === 0) {
+    Alert.alert('Error', 'ID de curso inválido.');
+    return false;
+  }
 
-        if (response.ok) {
-            return true
-        } else {
-            // Manejar errores de la respuesta DELETE
-            console.error('Error en la respuesta DELETE:', response.statusText);
-            Alert.alert('Error', 'Hubo un problema al eliminar el curso.');
-        }
-    } catch (error) {
-        // Manejar errores de la solicitud DELETE
-        console.error('Error al enviar la solicitud DELETE:', error.message);
-        Alert.alert('Error', 'Hubo un problema al eliminar el curso.');
+  try {
+    const response = await fetch(`${EXPO_Url}/cursos/${curso_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+
+    const data = await response.json();
+    if (data.status) {
+      Alert.alert('Éxito', `Curso eliminado correctamente. Alumnos eliminados: ${data.alumnos_eliminados}`);
+      return true;
+    } else {
+      Alert.alert('Error', data.error || 'Hubo un problema al eliminar el curso.');
+      return false;
     }
+  } catch (error) {
+    Alert.alert('Error', `Error al eliminar el curso: ${error.message}`);
+    return false;
+  }
 };
+
 
 export default eliminarCurso;
